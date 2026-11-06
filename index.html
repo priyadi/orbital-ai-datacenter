@@ -4,6 +4,28 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Orbital AI Datacenter Calculator</title>
+<meta name="description" content="Interactive calculator comparing solar-powered AI datacenters in Earth orbit against ground datacenters: power, fleet size, launch mass, cost per kWh, carbon and water. Every number is derived live from the sliders.">
+<meta name="author" content="Priyadi Iman Nurcahyo">
+<meta name="theme-color" content="#0e0f12">
+<link rel="canonical" href="https://priyadi.github.io/orbital-ai-datacenter/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Orbital AI Datacenter Calculator">
+<meta property="og:title" content="Orbital AI Datacenter Calculator">
+<meta property="og:description" content="Interactive calculator comparing solar-powered AI datacenters in Earth orbit against ground datacenters: power, fleet size, launch mass, cost per kWh, carbon and water. Every number is derived live from the sliders.">
+<meta property="og:url" content="https://priyadi.github.io/orbital-ai-datacenter/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://priyadi.github.io/orbital-ai-datacenter/og.png">
+<meta property="og:image:secure_url" content="https://priyadi.github.io/orbital-ai-datacenter/og.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Earth with a satellite in orbit next to the title Orbital AI Datacenter Calculator and two verdict cards: investor's verdict and planet's verdict.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Orbital AI Datacenter Calculator">
+<meta name="twitter:description" content="Interactive calculator comparing solar-powered AI datacenters in Earth orbit against ground datacenters: power, fleet size, launch mass, cost per kWh, carbon and water. Every number is derived live from the sliders.">
+<meta name="twitter:image" content="https://priyadi.github.io/orbital-ai-datacenter/og.png">
+<meta name="twitter:image:alt" content="Earth with a satellite in orbit next to the title Orbital AI Datacenter Calculator and two verdict cards: investor's verdict and planet's verdict.">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
 <style>
@@ -46,6 +68,7 @@
   .vcard.good{border-color:#1f6b45;background:linear-gradient(135deg,#13261c,#1a1a19)}
   .vcard.bad{border-color:#7a2b2b;background:linear-gradient(135deg,#2a1414,#1a1a19)}
   .vcard.mid{border-color:#7a5a12;background:linear-gradient(135deg,#2a2210,#1a1a19)}
+  .vcard .avatar{width:110px;height:130px;object-fit:contain;justify-self:center}
   .vcard .lab{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-2)}
   .vcard .big{font-size:22px;font-weight:700;letter-spacing:-.01em;margin:2px 0 4px}
   .vcard.good .big{color:#5fd39a}.vcard.bad .big{color:#ff8a8a}.vcard.mid .big{color:#f0c060}
@@ -83,6 +106,10 @@
   .btn{background:var(--surface-2);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:5px 10px;font-size:12px;cursor:pointer}
   .btn:hover{border-color:var(--text-2)}
   .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--text-2);margin:4px 0 2px}
+  .credit{margin-top:28px;padding-top:14px;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;font-size:12.5px;color:var(--muted)}
+  .credit a{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text-2)}
+  .credit a:hover{color:var(--text)}
+  .credit svg{width:15px;height:15px;fill:currentColor}
   .ref{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;border:1px solid var(--muted);background:transparent;color:var(--text-2);font:italic 600 10px/1 Georgia,serif;margin-left:6px;cursor:pointer;vertical-align:1px;padding:0}
   .ref:hover{border-color:var(--s1);color:var(--s1)}
   header h1 .ref{width:18px;height:18px;font-size:12px}
@@ -156,6 +183,10 @@
       <li><b>Not modeled:</b> radiation hardening and single-event upsets (and the mass of shielding), micrometeoroid/debris protection, deployable-structure dynamics at km² scale, array shadowing of radiators, Earth-link bandwidth (laser downlink), maintenance/replacement of failed hardware (no on-orbit servicing), launch-rate limits, collision risk and conjunction avoidance, end-of-life disposal, and the cost of the compute hardware itself.</li>
     </ul>
   </div>
+  <footer class="credit">
+    <span>Built by AI. Nothing is human-verified.</span>
+    <a href="https://github.com/priyadi/orbital-ai-datacenter"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>Source on GitHub</a>
+  </footer>
 </main>
 </div>
 <div class="tip" id="tip"></div>
@@ -720,17 +751,10 @@ function update(){
 }
 
 
-// ---------- mascots (original characters) ----------
-function face(mood){ // mouth + brows for a 100x100 face centred at 50,58
-  const m={happy:'<path d="M36 66q14 14 28 0" stroke="#222" stroke-width="3.5" fill="none" stroke-linecap="round"/>',
-           sad:'<path d="M36 72q14 -12 28 0" stroke="#222" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M34 46l10 4M66 46l-10 4" stroke="#222" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="68" cy="60" rx="2.5" ry="4" fill="#6fb1ff"/>',
-           mid:'<path d="M37 68h26" stroke="#222" stroke-width="3.5" stroke-linecap="round"/><path d="M34 47l10 1M56 48l10 -1" stroke="#222" stroke-width="2.5" stroke-linecap="round"/>'}[mood];
-  return `<circle cx="42" cy="55" r="3.2" fill="#222"/><circle cx="58" cy="55" r="3.2" fill="#222"/>`+m;
-}
-function mascotRocket(mood){const col=mood==="happy"?"#5fd39a":mood==="sad"?"#ff8a8a":"#f0c060";
-  return `<svg viewBox="0 0 100 120" width="110" height="130"><path d="M50 4q26 26 26 70H24q0-44 26-66z" fill="#e8e6df" stroke="#333" stroke-width="2"/><path d="M24 74l-14 20 16-4zM76 74l14 20-16-4z" fill="${col}" stroke="#333" stroke-width="2"/><circle cx="50" cy="60" r="22" fill="#fff" stroke="#333" stroke-width="2"/>${face(mood)}<path d="M40 92q10 ${mood==="sad"?8:22} 20 0z" fill="#ffb13b" opacity="${mood==="sad"?.5:.95}"/><path d="M45 92q5 ${mood==="sad"?5:14} 10 0z" fill="#ffe08a"/></svg>`;}
-function mascotPlanet(mood){const col=mood==="happy"?"#5fd39a":mood==="sad"?"#ff8a8a":"#f0c060";
-  return `<svg viewBox="0 0 100 120" width="110" height="130"><circle cx="50" cy="62" r="40" fill="#3f8fe0" stroke="#333" stroke-width="2"/><path d="M22 44q12-10 24 0t20 8q-6 14-24 16t-26-8q-2-10 6-16zM60 90q10-6 22-4-4 10-16 12z" fill="#4caf50" opacity=".9"/><circle cx="50" cy="62" r="40" fill="none" stroke="#333" stroke-width="2"/>${face(mood)}<path d="M50 18q-2-14 10-14 4 8-6 14 8-8 14-2-6 6-14 4" fill="${col}" stroke="#333" stroke-width="1.5"/></svg>`;}
+// ---------- avatars (img/*.svg) ----------
+const AVATAR={investor:{happy:"elon-happy",mid:"elon-normal",sad:"elon-sad"},planet:{happy:"greta-happy",mid:"greta-normal",sad:"greta-angry"}};
+function avatar(who,mood){const alt={investor:{happy:"Delighted investor",mid:"Pondering investor",sad:"Crying investor"},planet:{happy:"Smiling climate activist",mid:"Unimpressed climate activist",sad:"Angry climate activist"}}[who][mood];
+  return `<img class="avatar" src="img/${AVATAR[who][mood]}.svg" alt="${alt}" width="110" height="130">`;}
 function renderVerdicts(m,s){
   const cv=m.commVerdict,ev=m.envVerdict;
   const cm=cv==="viable"?"happy":cv==="marginal"?"mid":"sad", em=ev==="greener"?"happy":ev==="comparable"?"mid":"sad";
@@ -738,9 +762,9 @@ function renderVerdicts(m,s){
   const ctext={viable:"Commercially viable",marginal:"Marginal — too close to call",["not viable"]:"Not commercially viable"}[cv];
   const etext={greener:"Greener than ground",comparable:"Comparable to ground",worse:"Worse for the environment"}[ev];
   document.getElementById("verdicts").innerHTML=`
-  <div class="vcard ${cc}">${mascotRocket(cm)}<div><div class="lab">Investor's verdict${refBtn("r_verdictC")}</div><div class="big">${ctext}</div>
+  <div class="vcard ${cc}">${avatar("investor",cm)}<div><div class="lab">Investor's verdict${refBtn("r_verdictC")}</div><div class="big">${ctext}</div>
     <div class="why">Orbit <b>$${m.lcocOrbit.toFixed(2)}</b> vs ground <b>$${m.lcocGround.toFixed(2)}</b> per IT-kWh (<b>${fmtNum(m.commRatio,2)}×</b>). ${cv==="viable"?"Launch and spacecraft hardware are cheap enough that skipping the power bill and the building wins.":cv==="marginal"?"Within ±15 % — inside the error bars of every slider on this page.":"Annualized capex ("+fmtMoney(m.annCapex)+"/yr) swamps the ground electricity bill ("+fmtMoney(m.gElec)+"/yr) it would replace. Break-even needs ground power at $"+(m.breakevenElec>0?m.breakevenElec.toFixed(2):"∞")+"/kWh."}</div></div></div>
-  <div class="vcard ${ec}">${mascotPlanet(em)}<div><div class="lab">Planet's verdict${refBtn("r_verdictE")}</div><div class="big">${etext}</div>
+  <div class="vcard ${ec}">${avatar("planet",em)}<div><div class="lab">Planet's verdict${refBtn("r_verdictE")}</div><div class="big">${etext}</div>
     <div class="why">Lifetime <b>${fmtNum(m.co2OrbitInt,0)}</b> vs <b>${fmtNum(m.co2GroundInt,0)} gCO₂/kWh</b> (<b>${fmtNum(m.envRatio,2)}×</b>); water <b>${fmtNum(m.wOrbitInt,2)}</b> vs <b>${fmtNum(m.wGroundInt,2)} L/kWh</b>. ${ev==="greener"?"Avoiding "+s.ci+" g/kWh grid power repays the embodied carbon; orbit loses once the grid is cleaner than ≈"+fmtNum(m.ciBreakeven,0)+" g/kWh.":ev==="comparable"?"Within ±15 % on CO₂ (break-even grid ≈ "+fmtNum(m.ciBreakeven,0)+" g/kWh); orbit still wins decisively on water, loses on debris and re-entry aerosols.":"Embodied spacecraft carbon ("+fmtMass(m.co2BusEmb)+"), launch ("+fmtMass(m.co2Launch)+") and replacements outweigh the "+s.ci+" g/kWh grid power avoided; orbit needs a grid dirtier than ≈"+fmtNum(m.ciBreakeven,0)+" g/kWh."}</div></div></div>`;
 }
 function stackedBars(el,rows,unitFmt){
@@ -1042,4 +1066,3 @@ buildControls();update();
 </script>
 </body>
 </html>
-
