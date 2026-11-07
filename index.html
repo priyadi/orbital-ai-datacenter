@@ -69,6 +69,8 @@
   .vcard.bad{border-color:#7a2b2b;background:linear-gradient(135deg,#2a1414,#1a1a19)}
   .vcard.mid{border-color:#7a5a12;background:linear-gradient(135deg,#2a2210,#1a1a19)}
   .vcard .avatar{width:110px;height:130px;object-fit:contain;justify-self:center}
+  .vcard .glyph{width:96px;height:130px;justify-self:center;color:var(--text-2)}
+  .vcard.good .glyph{color:#5fd39a}.vcard.bad .glyph{color:#ff8a8a}.vcard.mid .glyph{color:#f0c060}
   .vcard .lab{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-2)}
   .vcard .big{font-size:22px;font-weight:700;letter-spacing:-.01em;margin:2px 0 4px}
   .vcard.good .big{color:#5fd39a}.vcard.bad .big{color:#ff8a8a}.vcard.mid .big{color:#f0c060}
@@ -178,7 +180,8 @@
       <li><b>Propulsion:</b> electric thrusters cancelling drag continuously: jet power = F·v<sub>e</sub>/(2η<sub>thr</sub>), v<sub>e</sub> = I<sub>sp</sub>·g₀; propellant rate = F/v<sub>e</sub>. Decay lifetime integrates da/dt = −ρ·(C<sub>d</sub>A/m)·√(μa) from the design altitude down to 150 km.</li>
       <li><b>Launch:</b> ideal energy per kg = μ/R<sub>E</sub> − μ/(2r) (no rotation credit, no losses). Chemical energy per launch assumes a Starship-class stack burning ≈1000 t of methane (≈50 MJ/kg LHV). Payload per launch is not derated for altitude or inclination.</li>
       <li><b>Economics:</b> capex (compute hardware + spacecraft hardware + launch) is annualized with a capital-recovery factor over the design life. Upkeep = propellant resupply (charged at launch $/kg; the propellant itself is negligible), replacement of failed compute units (hardware + relaunch, since nothing is repairable on orbit) and operations as a share of capex. The ground baseline uses the same hardware cost and life, a 15-year facility, PUE-scaled electricity, and a 2 %/yr repair allowance. Orbit has no electricity bill — its power plant is in the spacecraft hardware and launch lines.</li>
-      <li><b>Verdicts:</b> commercial = levelized cost per IT-kWh, orbit vs ground, with "marginal" for anything within ±15 % (well inside the uncertainty of these inputs). Environmental = lifetime CO₂e per IT-kWh with the same band; water is reported but orbit wins it by construction (no cooling towers, no power plant), and debris, re-entry aerosols and night-sky impacts are listed but not scored. Neither verdict prices latency, regulation, sovereignty, insurance availability, or the option value of not needing a grid connection.</li>
+      <li><b>Politics &amp; permitting:</b> the direct political bill (lobbying, PACs, community benefit agreements) is a recurring % of facility capex; the whole US industry's known political money is ≈0.1 % of its capex, so this line cannot move the verdict — it is here so you can see that. Tax incentives are the larger, opposite-signed political term and are taken off ground hardware, facility and electricity. The cost that does matter is time: expected ground time-to-power = permitting delay × (1 + ½·p/(1−p)) for block probability p, charged as carrying cost on half the facility capex plus 8 % sunk cost per blocked attempt. Orbit time-to-power = licensing lead time + fleet launches ÷ cadence. Compute delivered D years late is worth (1 − x)^D of compute delivered now, which turns both times into a time-adjusted cost ratio.</li>
+      <li><b>Verdicts:</b> commercial = levelized cost per IT-kWh, orbit vs ground, with "marginal" for anything within ±15 % (well inside the uncertainty of these inputs). Environmental = lifetime CO₂e per IT-kWh with the same band; water is reported but orbit wins it by construction (no cooling towers, no power plant), and debris, re-entry aerosols and night-sky impacts are listed but not scored. Permitting = expected time to power, orbit vs ground, same ±15 % band; it is the only place where politics changes the answer. None of the verdicts price latency, sovereignty, insurance availability, or debris liability.</li>
       <li><b>Environment:</b> launch CO₂ = methane burned × 2.75 (stoichiometry) × a lifecycle multiplier (upstream leakage, LOX/LNG production) × an optional high-altitude forcing multiplier; it is prorated by mass share of each launch. Embodied carbon is per kW of IT (hardware), per kg (spacecraft) and per kW over a 15-year life (facility). Ground water = on-site WUE + power-plant consumption × PUE; both sides carry fab water for the chips.</li>
       <li><b>Not modeled:</b> radiation hardening and single-event upsets (and the mass of shielding), micrometeoroid/debris protection, deployable-structure dynamics at km² scale, array shadowing of radiators, Earth-link bandwidth (laser downlink), maintenance/replacement of failed hardware (no on-orbit servicing), launch-rate limits, collision risk and conjunction avoidance, end-of-life disposal, and the cost of the compute hardware itself.</li>
     </ul>
@@ -259,6 +262,14 @@ const REFS={
  sec_drag:{t:"Drag & station-keeping",l:[["Wikipedia — Drag equation",W_+"Drag_equation"],["Wikipedia — Orbital decay",W_+"Orbital_decay"],["Wikipedia — Orbital station-keeping",W_+"Orbital_station-keeping"],["Wikipedia — Specific impulse",W_+"Specific_impulse"],["Wikipedia — Tsiolkovsky rocket equation",W_+"Tsiolkovsky_rocket_equation"],["Wikipedia — Ballistic coefficient",W_+"Ballistic_coefficient"]]},
  sec_launch:{t:"Launch",l:[["Wikipedia — Specific orbital energy",W_+"Specific_orbital_energy"],["Wikipedia — SpaceX Starship",W_+"SpaceX_Starship"],["Wikipedia — Heat of combustion",W_+"Heat_of_combustion"],["Wikipedia — Comparison of orbital launch systems",W_+"Comparison_of_orbital_launch_systems"]]},
  sec_fleet:{t:"Fleet",l:[["Wikipedia — Satellite constellation",W_+"Satellite_constellation"],["Wikipedia — Starlink",W_+"Starlink"],["Space.com — 1 million AI satellites","https://space.com/space-exploration/satellites/elon-musk-wants-to-put-1-million-ai-satellites-in-space-heres-how-spacex-could-do-it"]]},
+ subsidy:{t:"Ground tax incentives",l:[["Good Jobs First via Bloomberg Government — state losses from data-center tax breaks top $3 B/yr","https://news.bgov.com/esg/state-losses-from-data-center-tax-breaks-top-3-billion-annually"],["Texas Tribune — Texas gives data centers >$1 B/yr in tax breaks (Apr 2026)","https://www.texastribune.org/2026/04/08/texas-data-centers-sales-tax-break-billion-dollars/"],["Stateline — many states don't report losses from data-center tax breaks (Apr 2026)","https://stateline.org/2026/04/15/many-states-dont-report-losses-from-data-center-tax-breaks-study-says/"],["Business Insider — Crusoe's 85 % Stargate abatement in Abilene","https://www.businessinsider.nl/stargate-developer-crusoe-could-spend-3-5-billion-on-a-texas-data-center-most-of-it-will-be-tax-free/"]]},
+ polit:{t:"Political & community overhead",l:[["Issue One — Big Tech's $71 M federal lobbying in 2025","https://issueone.org/articles/armies-of-lobbyists-helped-big-tech-rack-up-victories-during-first-year-of-trumps-second-term/"],["Public Citizen — billionaires fuel 2026 super PAC spending (Musk $445 M)","https://www.citizen.org/article/millionaires-and-billionaires-fuel-2026-super-pac-spending/"],["CNBC — Musk's record election bet backfired (Nov 2026)","https://www.cnbc.com/2026/11/04/elon-musk-midterms-ai-data-centers.html"],["Prince William Times — supervisors' donations, mostly from data-center interests","https://www.princewilliamtimes.com/localnews/supervisors-collect-nearly-300k-in-campaign-donations-mostly-from-data-center-interests/article_a9aa805f-588e-4e8a-949c-217e2d2f92df.html"],["FAS — eight data-center community benefit agreements","https://fas.org/publication/data-center-community-benefit-agreements/"],["CalMatters — Big Tech spending against the data-center backlash","https://calmatters.org/economy/technology/2026/08/california-data-center-backlash-big-tech-lobbying/"]]},
+ gdelay:{t:"Ground time to power",l:[["Carbon Direct — interconnection queue analysis, PJM & ERCOT","https://www.carbon-direct.com/research-and-reports/ai-meets-the-grid-interconnection-queue-analysis-in-pjm-and-ercot"],["Wikipedia — PJM Interconnection",W_+"PJM_Interconnection"],["Wikipedia — Grid connection",W_+"Grid_connection"]]},
+ pblock:{t:"Block probability",l:[["Data Center Watch — $64 B blocked or delayed (to Q1 2025)","https://www.datacenterwatch.org/report"],["Data Center Watch — Q1 2026 update (~$130 B)","https://www.datacenterwatch.org/q1-2026"],["Bisnow — $68 B of projects upended in Q2 2026","https://www.bisnow.com/news/national/data-center-community-relations/community-backlash-upends-billions-of-dollars-in-new-data-center-projects"],["CNBC — voters rebuff data centers in 40 of 41 ballot measures (Nov 2026)","https://www.cnbc.com/2026/11/04/data-center-ballot-measures-2026-midterm.html"],["Exponent — caveats on the Data Center Watch figures","https://www.exponent.com/article/report-claims-64bn-data-center-projects-blocked-or-delayed"]]},
+ cadence:{t:"Launch cadence",l:[["Wikipedia — List of Falcon 9 and Falcon Heavy launches",W_+"List_of_Falcon_9_and_Falcon_Heavy_launches"],["Wikipedia — SpaceX Starship",W_+"SpaceX_Starship"],["Wikipedia — Starbase",W_+"Starbase"]]},
+ olic:{t:"Orbit licensing",l:[["Wikipedia — Federal Communications Commission (satellite licensing)",W_+"Federal_Communications_Commission"],["Wikipedia — International Telecommunication Union",W_+"International_Telecommunication_Union"],["Wikipedia — Office of Commercial Space Transportation (FAA)",W_+"Office_of_Commercial_Space_Transportation"],["The Next Web — SpaceX S-1 says orbital data centres may never be viable","https://thenextweb.com/news/spacex-orbital-data-centres-ipo-risk-disclosure"]]},
+ tval:{t:"Value decay of late compute",l:[["Wikipedia — Moore's law",W_+"Moore%27s_law"],["Wikipedia — Huang's law",W_+"Huang%27s_law"],["Wikipedia — Time value of money",W_+"Time_value_of_money"]]},
+ sec_politics:{t:"Politics & permitting",l:[["Data Center Watch","https://www.datacenterwatch.org/report"],["Issue One — Big Tech lobbying","https://issueone.org/articles/armies-of-lobbyists-helped-big-tech-rack-up-victories-during-first-year-of-trumps-second-term/"],["TIME — how AI backlash shaped the 2026 midterms","https://time.com/article/2026/11/04/midterm-elections-results-ai-industry-data-centers/"],["TechCrunch — why the economics of orbital AI are so brutal","https://techcrunch.com/2026/02/11/why-the-economics-of-orbital-ai-are-so-brutal/"]]},
  sec_econ:{t:"Economics",l:[["Wikipedia — Capital recovery factor",W_+"Capital_recovery_factor"],["Wikipedia — Levelized cost of electricity",W_+"Levelized_cost_of_electricity"],["Wikipedia — Power usage effectiveness",W_+"Power_usage_effectiveness"],["Wikipedia — Data center",W_+"Data_center"],["Wikipedia — Space launch market competition",W_+"Space_launch_market_competition"]]},
  sec_orbitvis:{t:"Orbit geometry & eclipse",l:[["Wikipedia — Beta angle",W_+"Beta_angle"],["Wikipedia — Umbra, penumbra and antumbra (Earth's shadow)",W_+"Umbra,_penumbra_and_antumbra"],["Wikipedia — Circular orbit",W_+"Circular_orbit"],["Wikipedia — Earth radius",W_+"Earth_radius"],["Wikipedia — Sun-synchronous orbit",W_+"Sun-synchronous_orbit"]]},
  ci:{t:"Grid carbon intensity",l:[["Wikipedia — Life-cycle greenhouse gas emissions of energy sources",W_+"Life-cycle_greenhouse_gas_emissions_of_energy_sources"],["Wikipedia — Emission intensity",W_+"Emission_intensity"],["Ember — Global Electricity Review","https://ember-energy.org/latest-insights/global-electricity-review-2024/"],["IEA — Emissions factors","https://www.iea.org/data-and-statistics/data-product/emissions-factors-2024"]]},
@@ -335,6 +346,11 @@ Object.assign(REFS,{
  r_verdictC:mk("Commercial verdict",[L("Wikipedia — Levelized cost of electricity (method)",W_+"Levelized_cost_of_electricity"),L("Wikipedia — Total cost of ownership",W_+"Total_cost_of_ownership"),L("Space.com — SpaceX orbital datacenter plan","https://space.com/space-exploration/satellites/elon-musk-wants-to-put-1-million-ai-satellites-in-space-heres-how-spacex-could-do-it")],"cost","buscost"),
  r_verdictE:mk("Environmental verdict",[L("Wikipedia — Life-cycle assessment",W_+"Life-cycle_assessment"),L("Wikipedia — Environmental impact of spaceflight",W_+"Environmental_impact_of_spaceflight")],"ci","fuelmult"),
  r_Chw:mk("Compute hardware cost (C_hw)",[],"hwcost"),
+ r_Csub:mk("Tax incentives (C_sub)",[],"subsidy"),
+ r_Cpol:mk("Political & community overhead (C_pol)",[],"polit"),
+ r_Cdelay:mk("Permitting delay & block risk (C_delay)",[],"gdelay","pblock"),
+ r_tpower:mk("Time to power (t_power)",[],"gdelay","pblock","cadence","olic"),
+ r_verdictT:mk("Permitting verdict",[],"sec_politics","tval"),
  r_Cbus:mk("Spacecraft hardware cost (C_bus)",[],"buscost"),
  r_Ccapex:mk("Total capex (C_capex)",[],"sec_econ"),
  r_CRF:mk("Annualized capex (CRF·C_capex)",[L("Wikipedia — Capital recovery factor",W_+"Capital_recovery_factor")],"wacc"),
@@ -377,9 +393,11 @@ const ICONS={
  notes:'<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 12h7M9 16h7"/>',
  propulsion:'<path d="M12 2c3 5 6 8 6 13a6 6 0 0 1-12 0c0-5 3-8 6-13z"/><path d="M12 12c1.5 2 2.5 3.5 2.5 5a2.5 2.5 0 0 1-5 0c0-1.5 1-3 2.5-5z"/>',
  structure:'<path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M12 12l9-5M12 12v10M12 12L3 7"/>',
+ politics:'<path d="M3 21h18M5 21v-9M9.5 21v-9M14.5 21v-9M19 21v-9M3 12h18L12 4z"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
 };
 function ico(name){return ICONS[name]?`<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ICONS[name]}</svg>`:"";}
-const GROUP_ICON={"Mission":"mission","Power":"power","Thermal":"thermal","Mass & structure":"structure","Drag & propulsion":"propulsion","Environment":"environment","Economics":"economics","Launch":"launch"};
+const GROUP_ICON={"Mission":"mission","Power":"power","Thermal":"thermal","Mass & structure":"structure","Drag & propulsion":"propulsion","Environment":"environment","Economics":"economics","Launch":"launch","Politics & permitting":"politics"};
 
 // ---------- inputs ----------
 const CTLS=[
@@ -420,6 +438,13 @@ const CTLS=[
  {g:"Economics",id:"elec",label:"Ground electricity price",min:0.02,max:0.3,step:0.005,def:0.08,fmt:v=>"$"+v.toFixed(3)+"/kWh",note:"Industrial power. US ≈ $0.07–0.09; Europe higher."},
  {g:"Economics",id:"pue",label:"Ground datacenter PUE",min:1.05,max:1.8,step:0.01,def:1.2,fmt:v=>v.toFixed(2)},
  {g:"Economics",id:"facility",label:"Ground facility capex (building, power, cooling)",min:2000,max:30000,step:500,def:12000,fmt:v=>"$"+fmtNum(v,0)+"/kW",note:"Hyperscale ≈ $8–15k per kW of IT load, amortized over 15 years."},
+ {g:"Politics & permitting",id:"subsidy",label:"Ground tax incentives (sales-tax exemption, property-tax abatement)",min:0,max:0.15,step:0.005,def:0.06,fmt:v=>(v*100).toFixed(1)+" %",note:"Discount on ground hardware, facility and electricity. 38 US states exempt data-center hardware (often electricity too) from 6–8 % sales tax; Abilene gave Stargate an 85 % property-tax abatement. Texas forgoes ≈$1.3 B/yr, Virginia ≈$1 B/yr. Ohio, Arizona and Illinois suspended theirs in 2026 — set 0 for repeal."},
+ {g:"Politics & permitting",id:"polit",label:"Political & community overhead (lobbying, PACs, benefit agreements)",min:0,max:0.10,step:0.0025,def:0.005,fmt:v=>(v*100).toFixed(2)+" % of facility capex/yr",note:"Big Tech's whole federal lobbying bill was $71 M in 2025 against ~$400 B of capex; all known industry political money is ≈0.1 % of capex. Community benefit agreements run $2–5 M per building per year. Even at 10 %/yr — twenty times reality — ground LCOC moves by about a sixth."},
+ {g:"Politics & permitting",id:"gdelay",label:"Ground time to power (permitting + grid interconnection)",min:0,max:8,step:0.25,def:3,fmt:v=>v.toFixed(2)+" yr",note:"PJM large-load queues average 36–48 months and energization adds 3–4 yr after approval. Half the facility capex is assumed committed up front and carried at the cost of capital for this long."},
+ {g:"Politics & permitting",id:"pblock",label:"Probability a ground site is blocked",min:0,max:0.6,step:0.01,def:0.25,fmt:v=>(v*100).toFixed(0)+" %",note:"Data Center Watch: $18 B blocked of $64 B contested (28 %) to Q1 2025, then $198 B blocked or delayed in H1 2026. Voters rejected 40 of 41 data-center ballot measures on 3 Nov 2026. A blocked site forfeits ~8 % of facility capex and restarts the clock."},
+ {g:"Politics & permitting",id:"cadence",label:"Launch cadence available to the fleet",min:1,max:Math.log10(3000),step:0.01,def:2,log:true,fmt:v=>fmtNum(v,0)+" launches/yr",note:"Falcon 9 flew ~165 times in 2025; Starship aspires to daily flights. Fleet deployment time = launches ÷ cadence."},
+ {g:"Politics & permitting",id:"olic",label:"Orbit licensing lead time (FCC, ITU, FAA, debris rules)",min:0,max:5,step:0.25,def:1.5,fmt:v=>v.toFixed(2)+" yr",note:"SpaceX's million-satellite FCC filing is a political process too, and its S-1 lists regulatory approval as a risk — but there are no neighbourhood ballot measures in orbit."},
+ {g:"Politics & permitting",id:"tval",label:"Value decay of late compute",min:0,max:0.5,step:0.01,def:0.30,fmt:v=>(v*100).toFixed(0)+" %/yr",note:"Hardware cost-performance improves ~30 %/yr, so compute delivered D years late is worth (1 − x)^D of compute delivered now. Converts time-to-power into a cost multiplier. Set 0 to ignore time."},
  {g:"Environment",id:"ci",label:"Grid carbon intensity (ground power)",min:0,max:900,step:10,def:400,fmt:v=>v+" gCO₂/kWh",note:"World average ≈ 450; US ≈ 370; France ≈ 60; coal-heavy grids 700–900. Set 0 for a datacenter on dedicated renewables."},
  {g:"Environment",id:"cprice",label:"Carbon price",min:0,max:300,step:5,def:0,fmt:v=>"$"+v+"/tCO₂",note:"Applied to both orbit and ground annual emissions in the economics. EU ETS has traded $60–100."},
  {g:"Environment",id:"hwco2",label:"Embodied carbon, compute hardware",min:200,max:5000,step:50,def:1500,fmt:v=>fmtNum(v,0)+" kgCO₂/kW",note:"Fab + assembly for a GPU server, per kW of IT load. Vendor LCAs put a GPU server at roughly 1–3 t per unit."},
@@ -529,7 +554,14 @@ function model(s,hOverride){
   m.gElec=itkWh*s.pue*s.elec;
   m.gOps=s.ops*(kW*s.hwcost+kW*s.facility);
   m.gReplace=0.02*kW*s.hwcost;                               // typical ground failure rate, repairable
-  m.annGround=m.gHw+m.gFac+m.gElec+m.gOps+m.gReplace;
+  // politics & permitting (ground)
+  m.gSubCap=s.subsidy*(m.gHw+m.gFac); m.gSubElec=s.subsidy*m.gElec; m.gSubsidy=m.gSubCap+m.gSubElec;   // tax incentives: money back
+  m.gPolit=s.polit*kW*s.facility;                                                                      // lobbying, PACs, community payments, legal — recurring
+  m.tGround=s.gdelay*(1+0.5*s.pblock/(1-s.pblock));                                                    // expected time to power incl. re-siting after a block
+  const facCap=kW*s.facility;
+  m.gDelayCap=0.5*facCap*(Math.pow(1+s.wacc,m.tGround)-1)+ (s.pblock/(1-s.pblock))*0.08*facCap;         // carrying cost on committed capital + sunk cost of blocked attempts
+  m.gDelay=m.gDelayCap*crf(s.wacc,15);                                                                 // annualized like the facility
+  m.annGround=m.gHw+m.gFac+m.gElec+m.gOps+m.gReplace-m.gSubsidy+m.gPolit+m.gDelay;
   m.lcocGround=m.annGround/itkWh;
   m.itkWh=itkWh;
   // environment (per station)
@@ -561,6 +593,14 @@ function model(s,hOverride){
   m.commRatio=cr; m.commVerdict=cr<=0.85?"viable":cr<=1.15?"marginal":"not viable";
   const er=m.co2OrbitInt/m.co2GroundInt;
   m.envRatio=er; m.envVerdict=er<=0.85?"greener":er<=1.15?"comparable":"worse";
+  // time to power: orbit = licensing + fleet launch campaign; ground = permitting/interconnection with block risk
+  m.tOrbit=s.olic+m.fleetLaunches/s.cadence;
+  m.timeRatio=m.tOrbit/Math.max(m.tGround,1e-6);
+  m.timeVerdict=m.tOrbit<=0.85*m.tGround?"faster":m.tOrbit<=1.15*m.tGround?"similar":"slower";
+  // value of late compute: a kWh delivered D years late is worth (1-x)^D → effective cost multiplier (1-x)^-D
+  m.tvOrbit=Math.pow(1-s.tval,-m.tOrbit); m.tvGround=Math.pow(1-s.tval,-m.tGround);
+  m.lcocOrbitT=m.lcocOrbit*m.tvOrbit; m.lcocGroundT=m.lcocGround*m.tvGround;
+  m.commRatioT=m.lcocOrbitT/m.lcocGroundT;
   return m;
 }
 function decayTime(h0,CdAoverM,mult){
@@ -606,6 +646,7 @@ function update(){
     tile("Fleet: "+fmtNum(m.N,0)+" × "+fmtSI(m.P,"W"),fmtSI(m.fleetP,"W"),"",fmtMass(m.fleetMass)+" · "+fmtNum(m.fleetLaunches,0)+" launches · "+fmtMoney(m.fleetCost))+
     tile("Boost power overhead <span class=sym>(P_thr/P)</span>"+refBtn("r_Pthr"),fmtNum(m.boostFrac*100,m.boostFrac<0.01?3:1),"%",fmtSI(m.thrustPower,"W")+" thruster power to cancel drag"+(m.boostFrac>0.1?flag("drag-dominated","bad"):m.boostFrac>0.01?flag("significant","warn"):""))+
     tile("Cost per IT-kWh <span class=sym>(LCOC)</span>"+refBtn("r_LCOC"),"$"+m.lcocOrbit.toFixed(2),"",fmtNum(m.lcocOrbit/m.lcocGround,1)+"× ground ($"+m.lcocGround.toFixed(2)+") · upkeep "+fmtMoney(m.upkeep)+"/yr")+
+    tile("Time to power, fleet <span class=sym>(t_power)</span>"+refBtn("r_tpower"),fmtNum(m.tOrbit,1)+" yr","","ground "+fmtNum(m.tGround,1)+" yr · "+fmtNum(m.fleetLaunches,0)+" launches at "+fmtNum(s.cadence,0)+"/yr + "+s.olic+" yr licensing")+
     tile("Lifetime if boost fails <span class=sym>(t_decay)</span>"+refBtn("r_tdecay"),fmtTime(m.lifetime),"","ballistic coeff "+fmtNum(m.totalMass/(s.cd*m.dragArea),1)+" kg/m²"+(m.lifetime<YEAR?flag("< 1 year","bad"):""));
 
   document.getElementById("cards").innerHTML=
@@ -737,6 +778,9 @@ function update(){
         [R("Facility (annualized, 15 yr)","C_fac","r_Cfac"),fmtMoney(m.gFac)+"/yr","$"+fmtNum(s.facility,0)+"/kW"],
         [R("Electricity","C_elec","r_Celec"),fmtMoney(m.gElec)+"/yr","PUE "+s.pue.toFixed(2)+" × $"+s.elec.toFixed(3)+"/kWh"],
         [R("Ops + 2 %/yr repairs","C_ops","r_Cops"),fmtMoney(m.gOps+m.gReplace)+"/yr"],
+        [R("Tax incentives","−C_sub","r_Csub"),(m.gSubsidy>0?"−":"")+fmtMoney(m.gSubsidy)+"/yr",(s.subsidy*100).toFixed(1)+" % off hardware, facility, power"],
+        [R("Political & community overhead","C_pol","r_Cpol"),fmtMoney(m.gPolit)+"/yr",(s.polit*100).toFixed(2)+" % of facility capex/yr"],
+        [R("Permitting delay & block risk","C_delay","r_Cdelay"),fmtMoney(m.gDelay)+"/yr",fmtNum(m.tGround,1)+" yr expected to power, "+(s.pblock*100).toFixed(0)+" % block risk"],
         [R("Carbon price","C_CO₂","r_cprice"),fmtMoney(m.carbonGround)+"/yr","$"+s.cprice+"/t × "+fmtMass(m.co2GroundYr)+"/yr"],
         [R("Total annual cost, ground","C_yr,ground","r_Cyr"),fmtMoney(m.annGround)+"/yr","",true],
         [R("Levelized cost per IT-kWh","LCOC_ground","r_LCOC"),"$"+m.lcocGround.toFixed(3),"orbit is "+fmtNum(m.lcocOrbit/m.lcocGround,2)+"× ground"],
@@ -744,7 +788,7 @@ function update(){
       ])}</div>
       </div>
       <div id="chartEcon" style="margin-top:10px"></div>
-      <div class="legend"><span><i style="background:var(--s1)"></i>annualized capex (orbit) / hardware + facility (ground)</span><span><i style="background:var(--s2)"></i>propellant launches</span><span><i style="background:var(--s3)"></i>replacement</span><span><i style="background:var(--s4)"></i>ops / repairs</span><span><i style="background:var(--s7)"></i>electricity (ground)</span></div>
+      <div class="legend"><span><i style="background:var(--s1)"></i>annualized capex (orbit) / hardware + facility (ground)</span><span><i style="background:var(--s2)"></i>propellant launches</span><span><i style="background:var(--s3)"></i>replacement</span><span><i style="background:var(--s4)"></i>ops / repairs</span><span><i style="background:var(--s5)"></i>politics + permitting delay (ground)</span><span><i style="background:var(--s7)"></i>electricity (ground)</span></div>
     </div>`;
 
   renderVerdicts(m,s); drawEnv(m,s); drawOrbit(m,s); drawMass(m); drawAreas(m); drawDrag(s); drawLife(s); drawEcon(m);
@@ -761,11 +805,21 @@ function renderVerdicts(m,s){
   const cc=cv==="viable"?"good":cv==="marginal"?"mid":"bad", ec=ev==="greener"?"good":ev==="comparable"?"mid":"bad";
   const ctext={viable:"Commercially viable",marginal:"Marginal — too close to call",["not viable"]:"Not commercially viable"}[cv];
   const etext={greener:"Greener than ground",comparable:"Comparable to ground",worse:"Worse for the environment"}[ev];
+  const tv=m.timeVerdict, tc=tv==="faster"?"good":tv==="similar"?"mid":"bad";
+  const ttext={faster:"Orbit is online first",similar:"Neck and neck on time",slower:"Ground is online first"}[tv];
+  const tglyph=`<svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M5 21v-9M9.5 21v-9M14.5 21v-9M19 21v-9M3 12h18L12 4z"/><circle cx="18.5" cy="6.5" r="3.6" fill="var(--surface)"/><path d="M18.5 4.6v1.9l1.3 1"/></svg>`;
+  const twhy=tv==="faster"
+    ?"Ground waits <b>"+fmtNum(m.tGround,1)+" yr</b> for permits and a grid connection (incl. "+(s.pblock*100).toFixed(0)+" % block risk); the fleet needs <b>"+fmtNum(m.tOrbit,1)+" yr</b> ("+s.olic+" yr licensing + "+fmtNum(m.fleetLaunches,0)+" launches at "+fmtNum(s.cadence,0)+"/yr)."
+    :tv==="similar"?"Both sides need about "+fmtNum(m.tGround,1)+" yr: ground for permits and interconnection, orbit for licensing plus "+fmtNum(m.fleetLaunches,0)+" launches at "+fmtNum(s.cadence,0)+"/yr."
+    :"Launching "+fmtNum(m.fleetLaunches,0)+" times at "+fmtNum(s.cadence,0)+"/yr plus "+s.olic+" yr of licensing takes <b>"+fmtNum(m.tOrbit,1)+" yr</b>; ground is powered in <b>"+fmtNum(m.tGround,1)+" yr</b> despite the queue.";
+  const tcost=s.tval>0?" Discounting late compute at "+(s.tval*100).toFixed(0)+" %/yr, orbit's time-adjusted cost is <b>"+fmtNum(m.commRatioT,2)+"×</b> ground (vs "+fmtNum(m.commRatio,2)+"× on LCOC alone).":" Time is not priced (value decay = 0).";
   document.getElementById("verdicts").innerHTML=`
   <div class="vcard ${cc}">${avatar("investor",cm)}<div><div class="lab">Investor's verdict${refBtn("r_verdictC")}</div><div class="big">${ctext}</div>
     <div class="why">Orbit <b>$${m.lcocOrbit.toFixed(2)}</b> vs ground <b>$${m.lcocGround.toFixed(2)}</b> per IT-kWh (<b>${fmtNum(m.commRatio,2)}×</b>). ${cv==="viable"?"Launch and spacecraft hardware are cheap enough that skipping the power bill and the building wins.":cv==="marginal"?"Within ±15 % — inside the error bars of every slider on this page.":"Annualized capex ("+fmtMoney(m.annCapex)+"/yr) swamps the ground electricity bill ("+fmtMoney(m.gElec)+"/yr) it would replace. Break-even needs ground power at $"+(m.breakevenElec>0?m.breakevenElec.toFixed(2):"∞")+"/kWh."}</div></div></div>
   <div class="vcard ${ec}">${avatar("planet",em)}<div><div class="lab">Planet's verdict${refBtn("r_verdictE")}</div><div class="big">${etext}</div>
-    <div class="why">Lifetime <b>${fmtNum(m.co2OrbitInt,0)}</b> vs <b>${fmtNum(m.co2GroundInt,0)} gCO₂/kWh</b> (<b>${fmtNum(m.envRatio,2)}×</b>); water <b>${fmtNum(m.wOrbitInt,2)}</b> vs <b>${fmtNum(m.wGroundInt,2)} L/kWh</b>. ${ev==="greener"?"Avoiding "+s.ci+" g/kWh grid power repays the embodied carbon; orbit loses once the grid is cleaner than ≈"+fmtNum(m.ciBreakeven,0)+" g/kWh.":ev==="comparable"?"Within ±15 % on CO₂ (break-even grid ≈ "+fmtNum(m.ciBreakeven,0)+" g/kWh); orbit still wins decisively on water, loses on debris and re-entry aerosols.":"Embodied spacecraft carbon ("+fmtMass(m.co2BusEmb)+"), launch ("+fmtMass(m.co2Launch)+") and replacements outweigh the "+s.ci+" g/kWh grid power avoided; orbit needs a grid dirtier than ≈"+fmtNum(m.ciBreakeven,0)+" g/kWh."}</div></div></div>`;
+    <div class="why">Lifetime <b>${fmtNum(m.co2OrbitInt,0)}</b> vs <b>${fmtNum(m.co2GroundInt,0)} gCO₂/kWh</b> (<b>${fmtNum(m.envRatio,2)}×</b>); water <b>${fmtNum(m.wOrbitInt,2)}</b> vs <b>${fmtNum(m.wGroundInt,2)} L/kWh</b>. ${ev==="greener"?"Avoiding "+s.ci+" g/kWh grid power repays the embodied carbon; orbit loses once the grid is cleaner than ≈"+fmtNum(m.ciBreakeven,0)+" g/kWh.":ev==="comparable"?"Within ±15 % on CO₂ (break-even grid ≈ "+fmtNum(m.ciBreakeven,0)+" g/kWh); orbit still wins decisively on water, loses on debris and re-entry aerosols.":"Embodied spacecraft carbon ("+fmtMass(m.co2BusEmb)+"), launch ("+fmtMass(m.co2Launch)+") and replacements outweigh the "+s.ci+" g/kWh grid power avoided; orbit needs a grid dirtier than ≈"+fmtNum(m.ciBreakeven,0)+" g/kWh."}</div></div></div>
+  <div class="vcard ${tc}">${tglyph}<div><div class="lab">Permitting verdict${refBtn("r_verdictT")}</div><div class="big">${ttext}</div>
+    <div class="why">${twhy}${tcost}</div></div></div>`;
 }
 function stackedBars(el,rows,unitFmt){
   const W=900,H=rows.length*34+12,L=70,max=Math.max(...rows.map(r=>r[1].reduce((a,b)=>a+b[1],0)))||1,pw=W-L-120;
@@ -803,7 +857,7 @@ function drawMass(m){
 }
 function drawEcon(m){
   const rows=[["Orbit",[["annualized capex",m.annCapex,"--s1"],["propellant launches",m.annProp,"--s2"],["replacement",m.annReplace,"--s3"],["ops",m.annOps,"--s4"],["carbon price",m.carbonOrbit,"--s3"]]],
-              ["Ground",[["hardware + facility",m.gHw+m.gFac,"--s1"],["electricity",m.gElec,"--s7"],["ops + repairs",m.gOps+m.gReplace,"--s4"],["carbon price",m.carbonGround,"--s3"]]]];
+              ["Ground",[["hardware + facility (net of incentives)",m.gHw+m.gFac-m.gSubCap,"--s1"],["electricity (net of incentives)",m.gElec-m.gSubElec,"--s7"],["ops + repairs",m.gOps+m.gReplace,"--s4"],["politics + permitting delay",m.gPolit+m.gDelay,"--s5"],["carbon price",m.carbonGround,"--s3"]]]];
   const W=900,H=80,L=70,max=Math.max(m.annOrbit,m.annGround)||1,pw=W-L-110;
   let svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-height:110px">`;
   rows.forEach((r,i)=>{
@@ -1051,6 +1105,8 @@ const PRESETS=[
  {n:"Pessimistic-realistic — worse on both counts",d:"100 W/kg arrays, 10 %/yr failures, 400 kg CO₂/kg spacecraft, 1.6× fuel lifecycle, 2× high-altitude forcing, 4-year life, 300 g/kWh grid. Orbit ≈ 1.4× ground CO₂ and ~3× its cost.",v:{spw:100,fail:0.10,busco2:400,fuelmult:1.6,altmult:2,life:4,ci:300}},
  {n:"Coal grid + $150/t carbon price",d:"800 g/kWh ground power priced at $150/tCO₂. Strongest environmental case for orbit, and a nudge to the economics.",v:{ci:800,cprice:150}},
  {n:"GEO — 35 786 km",d:"Near-continuous sun, zero drag, but no launch-mass derating is modeled here (it would be ~3× worse) and the radiator sink is colder.",v:{h:35786,beta:20,tsink:150},incl:0},
+ {n:"Politics as a cost line, maxed out",d:"Lobbying and community payments at 10 % of facility capex per year — twenty times what the industry actually spends — and every tax break repealed. Ground LCOC rises ~17 %; orbit is still ~1.9× ground. Buying politicians is cheap; it just stopped working.",v:{polit:0.10,subsidy:0}},
+ {n:"Post-midterm reality — ground gated by politics",d:"Nov 2026: 40 of 41 ballot measures against data centers, moratoria in 14 states, incentives repealed, 5-year queues, 40 % block risk. Starship flying 200×/yr. LCOC still favours ground; time-to-power does not.",v:{subsidy:0,gdelay:5,pblock:0.40,cadence:200}},
  {n:"Solar-max storm at 400 km",d:"Low orbit, 5× atmospheric density, sun-tracking arrays broadside. Watch the boost power and decay lifetime.",v:{h:400,solar:5,afrac:0.8}},
 ];
 function applyPreset(idx){
