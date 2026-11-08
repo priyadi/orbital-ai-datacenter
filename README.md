@@ -1,6 +1,6 @@
 # Orbital AI Datacenter Calculator
 
-Interactive calculator comparing orbital (satellite-based) AI datacenters against ground-based ones: power, fleet size, launch mass, cost, carbon, and water.
+Interactive calculator comparing orbital (satellite-based) AI datacenters against ground-based ones: power, fleet size, launch mass, cost, carbon, water, and time-to-power under permitting and political constraints.
 
 Live: https://priyadi.github.io/orbital-ai-datacenter/
 
