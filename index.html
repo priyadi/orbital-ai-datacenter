@@ -56,6 +56,7 @@
   details summary{cursor:pointer;padding:9px 12px;font-weight:600;font-size:13.5px;list-style:none;display:flex;justify-content:space-between;align-items:center;user-select:none}
   details summary::after{content:"▸";color:var(--muted);font-size:12px;transition:transform .15s}
   details[open] summary::after{transform:rotate(90deg)}
+  details.closing summary::after{transform:none}
   details .body{padding:4px 12px 12px}
   .ctl{margin:8px 0 10px}
   .ctl .row{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;gap:8px}
@@ -637,7 +638,26 @@ function buildControls(){
       body.appendChild(w);setExact(c,c.log?Math.pow(10,c.def):c.def);
       w.querySelector("input").addEventListener("input",()=>{delete exact[c.id];document.getElementById("presetNote").textContent="custom — edited from: "+PRESETS[document.getElementById("preset").value].n;update();});
     });
+    animateDetails(d);
     aside.appendChild(d);
+  });
+}
+// Animate <details> open/close: tween .body height/padding/opacity via Web Animations API, then commit the open state
+function animateDetails(d){
+  const b=d.querySelector(".body");
+  d.querySelector("summary").addEventListener("click",e=>{
+    e.preventDefault();
+    const opening=d.classList.contains("closing")||!d.open;
+    if(matchMedia("(prefers-reduced-motion: reduce)").matches){d.open=opening;return;}
+    let from=null;
+    if(d._anim){const cs=getComputedStyle(b);from={height:b.getBoundingClientRect().height+"px",paddingTop:cs.paddingTop,paddingBottom:cs.paddingBottom,opacity:cs.opacity};d._anim.cancel();} // mid-animation click: reverse from current state
+    d.open=true;d.classList.toggle("closing",!opening);
+    const cs=getComputedStyle(b), h=b.scrollHeight;
+    const closed={height:"0px",paddingTop:"0px",paddingBottom:"0px",opacity:0}, opened={height:h+"px",paddingTop:cs.paddingTop,paddingBottom:cs.paddingBottom,opacity:1};
+    const start=from??(opening?closed:opened), end=opening?opened:closed;
+    b.style.overflow="hidden";
+    d._anim=b.animate([start,end],{duration:40+200*Math.abs(parseFloat(end.height)-parseFloat(start.height))/Math.max(h,1),easing:"ease-out"});
+    d._anim.onfinish=()=>{d._anim=null;b.style.overflow="";d.classList.remove("closing");d.open=opening;};
   });
 }
 
