@@ -98,6 +98,14 @@
   table.kv td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:550;white-space:nowrap}
   table.kv tr.total td{border-top:1px solid var(--border);font-weight:650;color:var(--text)}
   table.kv td .f{display:block;font-size:11px;color:var(--muted);font-weight:400;font-family:ui-monospace,Menlo,Consolas,monospace}
+  math{font-family:"STIX Two Math","Cambria Math","Latin Modern Math","Noto Sans Math",math,serif}
+  .sym{white-space:nowrap}
+  table.kv td .f math{font-size:12.5px;color:var(--text-2)}
+  .mdesc math,.notes math,.ctl .note math{font-size:1.1em;color:var(--text)}
+  math[display="block"]{margin:8px 0;font-size:1.25em}
+  .mdesc math[display="block"]{margin:10px 0 6px}
+  table.kv td math[display="block"]{text-align:left;margin:4px 0}
+  .notes li math[display="block"]{text-align:left;margin:6px 0 6px 12px}
   .charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:12px;margin-top:12px}
   svg text{font-family:inherit}
   .tip{position:fixed;pointer-events:none;background:#2b2c33;border:1px solid var(--border);border-radius:6px;padding:6px 9px;font-size:12px;color:var(--text);display:none;z-index:9;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.4)}
@@ -176,14 +184,14 @@
   <div class="card" style="margin-top:12px">
     <h2 data-ico="notes">Model notes &amp; what is not modeled</h2>
     <ul class="notes">
-      <li><b>Eclipse:</b> circular orbit, fraction in shadow = acos(√(h²+2R<sub>E</sub>h) / ((R<sub>E</sub>+h)·cos β)) / π. β = 0° is the worst case (sun in orbit plane); β = 90° is a dawn-dusk sun-synchronous orbit with no eclipse (only achievable near-polar, and the β drifts seasonally).</li>
-      <li><b>Array:</b> sized to carry the IT load plus battery recharge during sunlight: P<sub>array</sub> = (P/η<sub>pcu</sub>)·(1 + f<sub>e</sub>/(f<sub>d</sub>·η<sub>rt</sub>)). Area uses 1361 W/m² × cell efficiency × derate (pointing, temperature, packing, end-of-life degradation).</li>
-      <li><b>Thermal:</b> every watt of electrical power ends up as heat. Two-sided radiator: A = Q / (2·ε·σ·(T<sub>rad</sub>⁴ − T<sub>sink</sub>⁴)). The effective sink in LEO is not 3 K: Earth IR (~240 W/m²) and albedo load a radiator, so 200–250 K is typical. T<sub>rad</sub> = T<sub>chip</sub> − ΔT: the radiator can only be as hot as the chip junction minus the drop through cold plate, coolant loop and fin, so an 85 °C chip with a 30 K drop gives a 328 K radiator. Hotter-qualified silicon is the main way to shrink the radiator.</li>
-      <li><b>Drag:</b> F = ½·ρ·v²·C<sub>d</sub>·A<sub>proj</sub> with an exponential-interpolated standard atmosphere (mean solar activity) scaled by the solar-activity multiplier. Projected area = fraction × (array + radiator planform); sun-tracking arrays in a terminator orbit can fly nearly edge-on, in other orbits the orbit-averaged projection is large.</li>
-      <li><b>Propulsion:</b> electric thrusters cancelling drag continuously: jet power = F·v<sub>e</sub>/(2η<sub>thr</sub>), v<sub>e</sub> = I<sub>sp</sub>·g₀; propellant rate = F/v<sub>e</sub>. Decay lifetime integrates da/dt = −ρ·(C<sub>d</sub>A/m)·√(μa) from the design altitude down to 150 km.</li>
-      <li><b>Launch:</b> ideal energy per kg = μ/R<sub>E</sub> − μ/(2r) (no rotation credit, no losses). Chemical energy per launch assumes a Starship-class stack burning ≈1000 t of methane (≈50 MJ/kg LHV). Payload per launch is not derated for altitude or inclination.</li>
+      <li><b>Eclipse:</b> circular orbit, fraction in shadow ⟦⟦f_e = frac{1}{π} acos frac{sqrt{h^2 + 2 R_E h}}{(R_E + h) cos β}⟧⟧ β = 0° is the worst case (sun in orbit plane); β = 90° is a dawn-dusk sun-synchronous orbit with no eclipse (only achievable near-polar, and the β drifts seasonally).</li>
+      <li><b>Array:</b> sized to carry the IT load plus battery recharge during sunlight: ⟦⟦P_array = frac{P}{η_pcu} (1 + frac{f_e}{f_d η_rt})⟧⟧ Area uses 1361 W/m² × cell efficiency × derate (pointing, temperature, packing, end-of-life degradation).</li>
+      <li><b>Thermal:</b> every watt of electrical power ends up as heat. Two-sided radiator: ⟦⟦A_rad = frac{Q}{2 ε σ (T_rad^4 − T_sink^4)}⟧⟧ The effective sink in LEO is not 3 K: Earth IR (~240 W/m²) and albedo load a radiator, so 200–250 K is typical. ⟦T_rad = T_chip − ΔT⟧: the radiator can only be as hot as the chip junction minus the drop through cold plate, coolant loop and fin, so an 85 °C chip with a 30 K drop gives a 328 K radiator. Hotter-qualified silicon is the main way to shrink the radiator.</li>
+      <li><b>Drag:</b> ⟦F_D = ½ ρ v^2 C_d A_proj⟧ with an exponential-interpolated standard atmosphere (mean solar activity) scaled by the solar-activity multiplier. Projected area = fraction × (array + radiator planform); sun-tracking arrays in a terminator orbit can fly nearly edge-on, in other orbits the orbit-averaged projection is large.</li>
+      <li><b>Propulsion:</b> electric thrusters cancelling drag continuously: jet power ⟦P_thr = frac{F_D v_e}{2 η_thr}⟧ with ⟦v_e = I_sp g_0⟧; propellant rate ⟦ṁ = F_D / v_e⟧. Decay lifetime integrates ⟦frac{d a}{d t} = −ρ frac{C_d A}{m} sqrt{μ a}⟧ from the design altitude down to 150 km.</li>
+      <li><b>Launch:</b> ideal energy per kg ⟦ε = frac{μ}{R_E} − frac{μ}{2 r}⟧ (no rotation credit, no losses). Chemical energy per launch assumes a Starship-class stack burning ≈1000 t of methane (≈50 MJ/kg LHV). Payload per launch is not derated for altitude or inclination.</li>
       <li><b>Economics:</b> capex (compute hardware + spacecraft hardware + launch) is annualized with a capital-recovery factor over the design life. Upkeep = propellant resupply (charged at launch $/kg; the propellant itself is negligible), replacement of failed compute units (hardware + relaunch, since nothing is repairable on orbit) and operations as a share of capex. The ground baseline uses the same hardware cost and life, a 15-year facility, PUE-scaled electricity, and a 2 %/yr repair allowance. Orbit has no electricity bill — its power plant is in the spacecraft hardware and launch lines.</li>
-      <li><b>Politics &amp; permitting:</b> the direct political bill (lobbying, PACs, community benefit agreements) is a recurring % of facility capex; the whole US industry's known political money is ≈0.1 % of its capex, so this line cannot move the verdict — it is here so you can see that. Tax incentives are the larger, opposite-signed political term and are taken off ground hardware, facility and electricity. The cost that does matter is time: expected ground time-to-power = permitting delay × (1 + ½·p/(1−p)) for block probability p, charged as carrying cost on half the facility capex plus 8 % sunk cost per blocked attempt. Orbit time-to-power = licensing lead time + fleet launches ÷ cadence. Compute delivered D years late is worth (1 − x)^D of compute delivered now, so delivering the same value after waiting D years costs (1 − x)^−D as much; the excess, annual cost × ((1 − x)^−D − 1), is booked on each side as the opportunity cost of time to power. It is part of annual cost and LCOC, so the Investor's verdict prices time.</li>
+      <li><b>Politics &amp; permitting:</b> the direct political bill (lobbying, PACs, community benefit agreements) is a recurring % of facility capex; the whole US industry's known political money is ≈0.1 % of its capex, so this line cannot move the verdict — it is here so you can see that. Tax incentives are the larger, opposite-signed political term and are taken off ground hardware, facility and electricity. The cost that does matter is time: expected ground time-to-power ⟦t_power = t_permit (1 + frac{p}{2 (1 − p)})⟧ for block probability ⟦p⟧, charged as carrying cost on half the facility capex plus 8 % sunk cost per blocked attempt. Orbit time-to-power = licensing lead time + fleet launches ÷ cadence. Compute delivered ⟦D⟧ years late is worth ⟦(1 − x)^D⟧ of compute delivered now, so delivering the same value after waiting ⟦D⟧ years costs ⟦(1 − x)^{−D}⟧ as much; the excess, ⟦C_time = C_yr ((1 − x)^{−D} − 1)⟧, is booked on each side as the opportunity cost of time to power. It is part of annual cost and LCOC, so the Investor's verdict prices time.</li>
       <li><b>Verdicts:</b> commercial = levelized cost per IT-kWh, orbit vs ground, with "marginal" for anything within ±15 % (well inside the uncertainty of these inputs). Environmental = lifetime CO₂e per IT-kWh with the same band; water is reported but orbit wins it by construction (no cooling towers, no power plant), and debris, re-entry aerosols and night-sky impacts are listed but not scored. There is no separate permitting verdict: time to power enters the commercial verdict as the opportunity-cost line, which is the only place where politics changes the answer; set value decay to 0 to see the plain bill. Neither verdict prices latency, sovereignty, insurance availability, or debris liability.</li>
       <li><b>Environment:</b> launch CO₂ = methane burned × 2.75 (stoichiometry) × a lifecycle multiplier (upstream leakage, LOX/LNG production) × an optional high-altitude forcing multiplier; it is prorated by mass share of each launch. Embodied carbon is per kW of IT (hardware), per kg (spacecraft) and per kW over a 15-year life (facility). Ground water = on-site WUE + power-plant consumption × PUE; both sides carry fab water for the chips.</li>
       <li><b>Offsets:</b> both sides may buy credits for the same share of their annual CO₂e at one price; the bill goes into annual cost and LCOC. Only share × integrity is netted off the reported intensity, so cheap low-integrity credits barely move the cost and move the verdict less. Because both sides offset the same share, the orbit/ground ratio never changes; only the "neutralised" state (100 % share at 100 % integrity) retires the Planet's verdict, and the comparison becomes purely a bill. The compliance carbon price is a separate slider: a datacenter in the EU pays ≈€82/t through its power whether or not it buys offsets. The high-altitude forcing multiplier is not CO₂ (soot, water vapour and NOx are short-lived), so "offsetting" it with CO₂ removal is GWP bookkeeping, not physics. Debris, re-entry aerosols, night sky and water cannot be offset and stay unscored.</li>
@@ -372,9 +380,62 @@ Object.assign(REFS,{
  r_LCOC:mk("Levelized cost per IT-kWh (LCOC)",[L("Wikipedia — Levelized cost of electricity (method)",W_+"Levelized_cost_of_electricity")],"wacc"),
  r_Cfac:mk("Facility cost (C_fac)",[],"facility"),
  r_Celec:mk("Electricity cost (C_elec)",[],"elec","pue"),
- r_pstar:mk("Break-even electricity price (p*)",[L("Wikipedia — Levelized cost of electricity",W_+"Levelized_cost_of_electricity")],"elec"),
+ r_pstar:mk("Break-even electricity price (p^*)",[L("Wikipedia — Levelized cost of electricity",W_+"Levelized_cost_of_electricity")],"elec"),
 });
-function R(label,sym,key){return label+(sym?" ("+sym+")":"")+refBtn(key);}
+// ---------- compact math notation → MathML ----------
+// a_b subscript, a^b superscript, {…} invisible group, (…) [...] ⌈…⌉ fenced groups, sqrt{…}, frac{a}{b}, “text” or "text", ~ thin space;
+// acos/cos/ceil/exp are functions; Δ is its own token. In strings, ⟦…⟧ is inline math and ⟦⟦…⟧⟧ display math.
+const MML_FN=new Set(["acos","cos","sin","ceil","exp","ln"]),MML_FENCE={"(":")","[":"]","⌈":"⌉","⌊":"⌋"};
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+function mmlTok(src){
+  const t=[];let i=0;
+  while(i<src.length){
+    const c=src[i];
+    if(/\s/.test(c)){i++;continue;}
+    if(c==='"'||c==="“"){const j=src.indexOf(c==="“"?"”":'"',i+1);t.push({k:"text",v:src.slice(i+1,j<0?src.length:j)});i=j<0?src.length:j+1;continue;}
+    let m;
+    if((m=/^(\d+(?:[ .]\d+)*|½|¼|¾)/.exec(src.slice(i)))){t.push({k:"num",v:m[0]});i+=m[0].length;continue;}
+    if(c==="Δ"||c==="∂"){t.push({k:"id",v:c});i++;continue;}
+    if((m=/^[\p{L}\p{M}₀-₉]+/u.exec(src.slice(i)))){t.push({k:"id",v:m[0]});i+=m[0].length;continue;}
+    t.push({k:"op",v:c});i++;
+  }
+  return t;
+}
+function mml(src,block){
+  const t=mmlTok(src);let p=0;
+  const peek=()=>t[p],next=()=>t[p++];
+  const wrap=(tag,s)=>`<${tag}>${s}</${tag}>`;
+  const row=s=>s.length===1?s[0]:wrap("mrow",s.join(""));
+  function group(close){const out=[];while(peek()&&peek().v!==close)out.push(expr());if(peek())next();return out;}
+  function atom(){
+    const k=next();if(!k)return "";
+    if(k.k==="num")return wrap("mn",esc(k.v));
+    if(k.k==="text")return wrap("mtext",esc(k.v));
+    if(k.k==="id"){
+      if(k.v==="sqrt"&&peek()&&peek().v==="{"){next();return wrap("msqrt",row(group("}")));}
+      if(k.v==="frac"&&peek()&&peek().v==="{"){next();const a=row(group("}"));next();const b=row(group("}"));return wrap("mfrac",a+b);}
+      if(MML_FN.has(k.v))return wrap("mi",k.v)+"<mo>&#x2061;</mo>";
+      return wrap("mi",esc(k.v));
+    }
+    if(k.v==="~")return "<mspace width=\"0.25em\"/>";
+    if(k.v==="{")return row(group("}"));
+    if(MML_FENCE[k.v]){const close=MML_FENCE[k.v];return wrap("mrow",`<mo>${k.v}</mo>`+row(group(close))+`<mo>${close}</mo>`);}
+    return wrap("mo",esc(k.v));
+  }
+  function expr(){
+    let base=atom(),sub="",sup="";
+    while(peek()&&(peek().v==="_"||peek().v==="^")){const o=next().v;const s=atom();if(o==="_")sub=s;else sup=s;}
+    if(sub&&sup)return wrap("msubsup",base+sub+sup);
+    if(sub)return wrap("msub",base+sub);
+    if(sup)return wrap("msup",base+sup);
+    return base;
+  }
+  const out=[];while(p<t.length)out.push(expr());
+  return `<math${block?' display="block"':''}>${row(out)}</math>`;
+}
+const richHTML=h=>h.replace(/⟦⟦([\s\S]*?)⟧⟧/g,(_,m)=>mml(m,true)).replace(/⟦([\s\S]*?)⟧/g,(_,m)=>mml(m));
+const rich=s=>richHTML(esc(s));
+function R(label,sym,key){return label+(sym?' <span class="sym">('+(/\p{L}/u.test(sym)?mml(sym):sym)+")</span>":"")+refBtn(key);}
 function refBtn(id){return REFS[id]?`<button class="ref" data-ref="${id}" title="What this is &amp; references" aria-label="What this is and references">i</button>`:"";}
 // Plain-language explanation shown at the top of each references box, keyed like REFS.
 const DESC={
@@ -390,39 +451,39 @@ const DESC={
  pcu:"Power conversion efficiency is the fraction of array (or battery) power that reaches the chips as regulated voltage. Bus power = IT load ÷ this efficiency, so every point of loss grows the array and the batteries and — because the loss is dissipated as heat — the radiator.",
  bse:"Battery specific energy is the usable energy stored per kilogram of flight-qualified battery pack, including cells, packaging, thermal management and electronics. Battery mass = required capacity ÷ specific energy. Flight packs are heavier per watt-hour than bare cells.",
  dod:"Depth of discharge is how much of the battery's capacity is actually drawn each eclipse. A LEO station cycles about fifteen times a day, so a shallow depth of discharge is what lets the pack survive the design life; the price is that installed capacity = energy per eclipse ÷ DoD, so a low DoD means a bigger, heavier battery.",
- rt:"Battery round-trip efficiency is the fraction of energy put into the battery during sunlight that comes back out in eclipse. The array must supply the eclipse load plus this loss during the sunlit part of the orbit, so a lower efficiency grows the array through the term f_e / (f_d · η_rt).",
- tchip:"Chip operating (junction) temperature is the temperature the silicon is allowed to run at. Radiator temperature equals this minus the thermal drop, and radiated flux goes as T⁴, so hotter-running chips shrink the radiator dramatically. Commercial GPUs throttle near 85–90 °C; silicon qualified for higher temperatures is a real design lever.",
+ rt:"Battery round-trip efficiency is the fraction of energy put into the battery during sunlight that comes back out in eclipse. The array must supply the eclipse load plus this loss during the sunlit part of the orbit, so a lower efficiency grows the array through the term ⟦frac{f_e}{f_d η_rt}⟧.",
+ tchip:"Chip operating (junction) temperature is the temperature the silicon is allowed to run at. Radiator temperature equals this minus the thermal drop, and radiated flux goes as ⟦T^4⟧, so hotter-running chips shrink the radiator dramatically. Commercial GPUs throttle near 85–90 °C; silicon qualified for higher temperatures is a real design lever.",
  dT:"Thermal drop is the temperature difference between the chip junction and the radiator surface, accumulated across die attach, cold plate, coolant loop and radiator fin. It is subtracted from chip temperature to get radiator temperature. A smaller drop needs higher coolant flow and more pump and plumbing mass, which the model does not charge for.",
- trad:"Radiator temperature is the surface temperature of the heat-rejecting panels. It is not set directly: it equals chip junction temperature minus the junction-to-radiator thermal drop. Because radiated flux scales with T_rad⁴ − T_sink⁴, it is the single strongest lever on radiator area.",
- tsink:"Effective sink temperature is the temperature of the environment the radiator radiates into. Deep space is about 3 K, but a radiator in LEO also absorbs Earth's infrared (~240 W/m²) and reflected sunlight, which is equivalent to radiating into a 200–250 K sink. Net flux = 2εσ(T_rad⁴ − T_sink⁴); if the sink is as warm as the radiator, nothing is rejected.",
+ trad:"Radiator temperature is the surface temperature of the heat-rejecting panels. It is not set directly: it equals chip junction temperature minus the junction-to-radiator thermal drop. Because radiated flux scales with ⟦T_rad^4 − T_sink^4⟧, it is the single strongest lever on radiator area.",
+ tsink:"Effective sink temperature is the temperature of the environment the radiator radiates into. Deep space is about 3 K, but a radiator in LEO also absorbs Earth's infrared (~240 W/m²) and reflected sunlight, which is equivalent to radiating into a 200–250 K sink. Net flux ⟦q = 2 ε σ (T_rad^4 − T_sink^4)⟧; if the sink is as warm as the radiator, nothing is rejected.",
  emis:"Radiator emissivity is how efficiently the surface radiates in the infrared compared with an ideal black body (1.0). Good white paints and optical solar reflectors reach 0.85–0.92. Net radiated flux scales linearly with it; the model radiates from both faces of a two-sided panel.",
  rad_kg:"Radiator areal density is the mass per square metre of deployable radiator, including the panel, fluid loops, pumps and deployment structure. Radiator mass = radiator area × this density.",
  kgkw:"Compute hardware mass is the mass of the IT equipment per kilowatt of IT load — boards, heat spreaders, memory, networking and their mechanical support. A full datacenter rack with chassis and fans is heavy; a board-level design built for a liquid-cooled spacecraft can be much lighter. It is launched with the station and relaunched with every replacement.",
  struct:"Structure, harness, avionics and shielding is an overhead fraction added on top of the sum of compute, array, battery and radiator masses to get dry mass. It stands in for trusses, deployment booms, cabling, attitude control, communications and radiation shielding. Spacecraft bus fractions of 20–30 % are typical.",
- cd:"The drag coefficient C_d relates dynamic pressure to drag force on the projected area: F = ½ρv²C_dA. In the free-molecular flow of the upper thermosphere it is not the 0.5–1 of aircraft but about 2.2 for most satellites, somewhat higher for flat plates.",
+ cd:"The drag coefficient ⟦C_d⟧ relates dynamic pressure to drag force on the projected area: ⟦F_D = ½ ρ v^2 C_d A_proj⟧. In the free-molecular flow of the upper thermosphere it is not the 0.5–1 of aircraft but about 2.2 for most satellites, somewhat higher for flat plates.",
  afrac:"Projected drag area as a fraction of planform area is how much of the array-plus-radiator sheet faces the velocity vector on average. A perfectly edge-on sheet shows only its thickness; a sun-tracking array in a non-dawn-dusk orbit swings through face-on every orbit. Drag force, propellant and thruster power all scale linearly with it.",
  solar:"The atmospheric density multiplier scales the mean-solar-activity standard atmosphere up or down. Thermospheric density at 500 km swings by an order of magnitude between solar minimum and maximum, and geomagnetic storms spike it further — the February 2022 storm that dragged down 38 fresh Starlinks is the cautionary tale. It multiplies drag and propellant use and shortens the unboosted lifetime.",
- isp:"Specific impulse (I_sp) is the thruster's exhaust velocity divided by g₀, in seconds — how much momentum each kilogram of propellant delivers. Propellant per year = drag force ÷ (I_sp·g₀) × time, so doubling I_sp halves propellant mass, but thruster power = F·v_e/(2η) rises in proportion.",
- teff:"Thruster efficiency is the fraction of electrical power delivered to the thruster that becomes kinetic energy of the exhaust jet. Thruster power = drag force × exhaust velocity ÷ (2 × efficiency); the remainder is heat and ionisation losses. Hall thrusters run around 50–60 %.",
- payload:"Payload per launch is the mass one launch can place in the target orbit. Launches per station = ceil(total launched mass ÷ payload); fleet launches pack stations by mass. It also prorates launch CO₂ — each station is charged its mass share of a launch. Not derated for altitude or inclination.",
+ isp:"Specific impulse (⟦I_sp⟧) is the thruster's exhaust velocity divided by ⟦g_0⟧, in seconds — how much momentum each kilogram of propellant delivers. Doubling ⟦I_sp⟧ halves propellant mass, but thruster power rises in proportion. ⟦⟦ṁ = frac{F_D}{I_sp g_0}⟧⟧ ⟦⟦P_thr = frac{F_D v_e}{2 η_thr}⟧⟧",
+ teff:"Thruster efficiency is the fraction of electrical power delivered to the thruster that becomes kinetic energy of the exhaust jet. The remainder is heat and ionisation losses. Hall thrusters run around 50–60 %. ⟦⟦P_thr = frac{F_D v_e}{2 η_thr}⟧⟧",
+ payload:"Payload per launch is the mass one launch can place in the target orbit. Launches per station ⟦n_L = ⌈frac{m_total}{m_payload}⌉⟧; fleet launches pack stations by mass. It also prorates launch CO₂ — each station is charged its mass share of a launch. Not derated for altitude or inclination.",
  cost:"Launch cost per kilogram is the price charged to put mass in orbit. It multiplies total launched mass for station capex and annual propellant mass for the resupply line of upkeep; replacement hardware is also relaunched at this price. It is the dominant lever on the orbit side's economics.",
  lprop:"Propellant burned per launch is the total methalox load of the launch stack, used only for energy and CO₂ accounting. The model takes 21.7 % of it as methane (Raptor's oxidiser-to-fuel ratio), applies 50 MJ/kg for chemical energy and 2.75 kg CO₂ per kg of methane for combustion emissions.",
  hwcost:"Compute hardware cost is the purchase price of IT equipment per kilowatt of IT load — the accelerator plus its share of CPU, memory, networking and chassis. It is identical for orbit and ground, annualized over the design life on both sides, and is the base for the replacement line.",
  buscost:"Spacecraft hardware cost prices everything launched that is not compute — arrays, radiators, batteries, structure — per kilogram of that mass. Mass-produced Starlink-class buses cost a few hundred dollars per kilogram; traditional one-off spacecraft cost a hundred times more.",
  fail:"Annual compute hardware replacement rate is the fraction of IT hardware that fails each year and must be replaced. In orbit a failed unit cannot be repaired; the model charges a new unit's hardware cost plus its launch, and the matching embodied and launch CO₂. Radiation and the lack of servicing push this above the 2 %/yr assumed for ground.",
  ops:"Operations, ground segment and insurance is a recurring annual cost expressed as a percentage of capex. For the orbit side it covers mission control, ground stations, downlink and insurance on the whole capex; for the ground side the same percentage is applied to hardware plus facility and covers staff, maintenance and security.",
- wacc:"Cost of capital is the annual rate at which money tied up in hardware, spacecraft and launches must be paid for. Capex is converted to an annual charge with the capital-recovery factor CRF = i / (1 − (1+i)^−n) over the design life (15 years for the ground facility). It also prices the carrying cost of capital committed during permitting delays.",
- elec:"Ground electricity price is what the ground datacenter pays per kWh from the grid. Electricity cost = IT kWh × PUE × price; it is the ground baseline's largest recurring line and the item the orbit side avoids entirely. The break-even price p* is the value at which the two sides' costs match.",
+ wacc:"Cost of capital is the annual rate at which money tied up in hardware, spacecraft and launches must be paid for. Capex is converted to an annual charge with the capital-recovery factor ⟦CRF⟧ over the design life ⟦n⟧ (15 years for the ground facility). It also prices the carrying cost of capital committed during permitting delays. ⟦⟦CRF = frac{i}{1 − (1 + i)^{−n}}⟧⟧",
+ elec:"Ground electricity price is what the ground datacenter pays per kWh from the grid. Electricity cost = IT kWh × PUE × price; it is the ground baseline's largest recurring line and the item the orbit side avoids entirely. The break-even price ⟦p^*⟧ is the value at which the two sides' costs match.",
  pue:"Power usage effectiveness is total facility power divided by IT power: 1.2 means 20 % overhead for cooling, lighting and power distribution. Ground electricity cost, grid CO₂ and water for power generation all scale with it. Orbit has no equivalent line because its overheads (thrusters, conversion losses) are modelled explicitly.",
  facility:"Ground facility capex is the cost of the building, power distribution, backup and cooling plant per kilowatt of IT load, excluding IT hardware. It is annualized over a 15-year building life, and the politics lines (political overhead, delay carrying cost, blocked-site write-off) are expressed as fractions of it.",
  subsidy:"Ground tax incentives is the effective discount ground operators receive through sales-tax exemptions on hardware, property-tax abatements and, often, exempt electricity. The model applies it as a percentage rebate on annualized hardware, facility and electricity cost and subtracts it from the ground total. Set it to zero to model repeal.",
  polit:"Political and community overhead is the recurring money spent to win and keep a ground site: lobbying, PAC contributions, community benefit agreements, legal fees. It is charged as a percentage of facility capex per year. Known industry totals are tiny relative to capex, which is why the slider's range is narrow and the default small.",
  gdelay:"Ground time to power is the number of years from committing to a site until it is energized: permitting plus the grid-interconnection queue. Half the facility capex is assumed committed at the start and carried at the cost of capital for that long. Combined with the block probability it gives the expected time to power that the opportunity-cost line uses.",
- pblock:"Probability a ground site is blocked is the chance that opposition, a moratorium or a lost vote kills a chosen site. A blocked attempt forfeits about 8 % of facility capex (land options, design, legal) and the clock restarts, so expected time to power = delay × (1 + 0.5·p/(1−p)) and the sunk cost p/(1−p) × 8 % of facility capex is annualized.",
+ pblock:"Probability a ground site is blocked is the chance that opposition, a moratorium or a lost vote kills a chosen site. A blocked attempt forfeits about 8 % of facility capex (land options, design, legal) and the clock restarts, so expected time to power stretches as below and the sunk cost ⟦frac{p}{1 − p} × 8 %⟧ of facility capex is annualized. ⟦⟦t_power = t_permit (1 + frac{p}{2 (1 − p)})⟧⟧",
  cadence:"Launch cadence available to the fleet is how many launches per year can be devoted to this constellation. Deployment time = fleet launches ÷ cadence, which is added to licensing lead time to get orbit's time to power. Fleet totals, not per-station figures, depend on it.",
  olic:"Orbit licensing lead time is the years spent obtaining spectrum, orbital-debris and launch approvals (FCC, ITU, FAA) before the first station can fly. It is added to the launch campaign duration to give orbit's time to power, and therefore its opportunity cost of waiting.",
- tval:"Value decay of late compute is the annual rate at which the worth of a unit of compute falls because cost-performance keeps improving. Compute delivered D years late is worth (1−x)^D of compute delivered now, so each side's annual cost is multiplied by (1−x)^−D and the excess is reported as the opportunity cost of time to power. Set to zero to compare bills without pricing time.",
- ci:"Grid carbon intensity is the CO₂e emitted per kWh of electricity the ground datacenter buys. Operational emissions = IT kWh × PUE × intensity; it is the ground side's dominant emission source and what the orbital case must beat with its launch and embodied carbon. The break-even intensity ci* is the grid at which the two sides tie.",
+ tval:"Value decay of late compute is the annual rate at which the worth of a unit of compute falls because cost-performance keeps improving. Compute delivered ⟦D⟧ years late is worth ⟦(1 − x)^D⟧ of compute delivered now, so each side's annual cost is multiplied by ⟦(1 − x)^{−D}⟧ and the excess is reported as the opportunity cost of time to power. Set to zero to compare bills without pricing time.",
+ ci:"Grid carbon intensity is the CO₂e emitted per kWh of electricity the ground datacenter buys. Operational emissions = IT kWh × PUE × intensity; it is the ground side's dominant emission source and what the orbital case must beat with its launch and embodied carbon. The break-even intensity ⟦ci^*⟧ is the grid at which the two sides tie.",
  cprice:"Carbon price is a compliance cost — a tax or allowance price — applied to both sides' annual CO₂e. It adds a dollar line to each side's annual cost and LCOC; it does not change the emissions themselves.",
  offset:"Share of emissions covered by purchased credits is the fraction of each side's annual CO₂e for which offset or removal credits are bought. The purchase is a bill (share × price × tonnes) added to both sides' annual cost; only share × integrity is deducted from the reported net intensity. At 100 % with perfect integrity the environmental verdict becomes “neutralised on paper”.",
  oprice:"Offset credit price is what each tonne of purchased credit costs. The slider spans three regimes: the few dollars a tonne that cheap avoidance credits actually trade at, tens of dollars for nature-based removal, and hundreds for durable engineered removal. It is separate from the compliance carbon price.",
@@ -446,56 +507,56 @@ const DESC={
  sec_econ:"Economics annualizes each side's capital with a capital-recovery factor, adds recurring upkeep — propellant resupply, replacement, operations, carbon and offset bills — and an opportunity cost for the years spent waiting for power, then divides by IT kWh delivered to get a levelized cost per IT-kWh that can be compared directly between orbit and ground.",
  sec_orbitvis:"The orbit view draws the chosen orbit around Earth in an inertial frame with the Sun in its true direction for the selected β angle and inclination, showing where the station passes through Earth's shadow and how the eclipse fraction arises. It is illustrative; the numbers come from the same formulas as the Orbit card.",
  sec_area:"The footprint chart draws the station's array and radiator next to familiar areas at the same scale — the ISS arrays and a football pitch — so the km² figures have a reference.",
- r_radius:"Orbital radius r is the distance from Earth's centre to the station: Earth's mean radius (6 371 km) plus altitude. Orbital speed, period, eclipse geometry and ideal launch energy are all functions of r rather than h.",
- r_v:"Orbital velocity v = √(μ/r) is the speed of a circular orbit, about 7.6 km/s at 550 km. Drag force scales with v² and drag power with v³, so it matters more than its small variation with altitude suggests.",
- r_T:"Orbital period T = 2π√(r³/μ) is the time for one revolution — about 95 minutes in LEO, 24 hours at GEO. Multiplied by the eclipse fraction it gives eclipse duration per orbit, which sizes the battery; 86 400/T is the number of charge–discharge cycles per day.",
- r_fe:"Eclipse fraction f_e is the share of each orbit spent in Earth's shadow, computed from altitude and β angle for a cylindrical shadow: acos(√(h²+2R_Eh) / (r·cos β)) / π, or zero when the orbit clears the shadow. The sunlit fraction is f_d = 1 − f_e. It sets battery capacity and the recharge margin on the array.",
- r_rho:"Atmospheric density ρ at the station's altitude, from a piecewise-exponential standard atmosphere for mean solar activity multiplied by the solar-activity slider. It enters drag force linearly and spans about ten orders of magnitude between sea level and 1 000 km.",
- r_P:"IT load P is the slider value in watts — the continuous electrical power consumed by the compute hardware. It is the reference against which thruster overhead, launch energy payback and cost per IT-kWh are measured.",
- r_Pbus:"Bus power P_bus = P / η_pcu is the IT load plus power-conversion losses: what the arrays and batteries must actually deliver. Because conversion losses also become heat, P_bus is also the heat the radiator must reject.",
- r_Parray:"Array output in sunlight P_array = P_bus · (1 + f_e / (f_d · η_rt)) is what the arrays must produce while lit: the bus load plus enough surplus to refill the batteries for the next eclipse, allowing for round-trip losses. With no eclipse it equals bus power.",
- r_Aarray:"Array area A_array = P_array / (1361 W/m² × cell efficiency × derate) is the deployed area needed at the chosen efficiency and derate. It is the largest single surface on the station and most of the planform that catches drag.",
- r_marray:"Array mass m_array = P_array / specific power. It usually dominates the non-compute mass unless radiators run cold.",
- r_Ebatt:"Battery capacity E_batt = P_bus × eclipse time per orbit ÷ depth of discharge: the installed watt-hours required to carry the bus load through the longest eclipse while never discharging below the chosen DoD.",
- r_mbatt:"Battery mass m_batt = E_batt / specific energy. It vanishes in a no-eclipse (β = 90°) orbit and is largest at β = 0° in low orbits.",
- r_Eyr:"Annual energy delivered E_yr = P × 8 766 h is the IT energy the station supplies per year at full utilisation. It is the denominator of cost per IT-kWh and of carbon intensity per kWh.",
- r_Q:"Heat to reject Q equals bus power: by conservation of energy every watt the arrays feed in, including conversion losses, ends up as heat that only radiation can remove in vacuum.",
- r_q:"Net radiated flux q = 2εσ(T_rad⁴ − T_sink⁴) is the watts per square metre a two-sided radiator sheds at the given radiator temperature, emissivity and effective sink temperature (σ is the Stefan–Boltzmann constant). It falls steeply as the radiator cools or the sink warms, and is zero or negative when T_rad ≤ T_sink.",
- r_Trad:"Radiator temperature T_rad = chip junction temperature − junction-to-radiator thermal drop, in kelvin. Because flux scales with T_rad⁴, a 20 K change moves radiator area by roughly a quarter.",
- r_Arad:"Radiator area A_rad = Q / q: heat to reject divided by net flux per square metre. It is shown alongside array area because both are large deployable sheets that add mass and drag; a cold-radiator warning fires when T_rad is below about 290 K.",
- r_mrad:"Radiator mass m_rad = A_rad × areal density, covering panels, fluid loops and pumps.",
+ r_radius:"Orbital radius ⟦r = R_E + h⟧ is the distance from Earth's centre to the station: Earth's mean radius (6 371 km) plus altitude. Orbital speed, period, eclipse geometry and ideal launch energy are all functions of ⟦r⟧ rather than ⟦h⟧.",
+ r_v:"Orbital velocity ⟦v = sqrt{frac{μ}{r}}⟧ is the speed of a circular orbit, about 7.6 km/s at 550 km. Drag force scales with ⟦v^2⟧ and drag power with ⟦v^3⟧, so it matters more than its small variation with altitude suggests.",
+ r_T:"Orbital period ⟦T = 2π sqrt{frac{r^3}{μ}}⟧ is the time for one revolution — about 95 minutes in LEO, 24 hours at GEO. Multiplied by the eclipse fraction it gives eclipse duration per orbit, which sizes the battery; ⟦86 400 / T⟧ is the number of charge–discharge cycles per day.",
+ r_fe:"Eclipse fraction ⟦f_e⟧ is the share of each orbit spent in Earth's shadow, computed from altitude and β angle for a cylindrical shadow, or zero when the orbit clears the shadow. The sunlit fraction is ⟦f_d = 1 − f_e⟧. It sets battery capacity and the recharge margin on the array. ⟦⟦f_e = frac{1}{π} acos frac{sqrt{h^2 + 2 R_E h}}{r cos β}⟧⟧",
+ r_rho:"Atmospheric density ⟦ρ⟧ at the station's altitude, from a piecewise-exponential standard atmosphere for mean solar activity multiplied by the solar-activity slider. It enters drag force linearly and spans about ten orders of magnitude between sea level and 1 000 km.",
+ r_P:"IT load ⟦P⟧ is the slider value in watts — the continuous electrical power consumed by the compute hardware. It is the reference against which thruster overhead, launch energy payback and cost per IT-kWh are measured.",
+ r_Pbus:"Bus power ⟦P_bus = frac{P}{η_pcu}⟧ is the IT load plus power-conversion losses: what the arrays and batteries must actually deliver. Because conversion losses also become heat, ⟦P_bus⟧ is also the heat the radiator must reject.",
+ r_Parray:"Array output in sunlight ⟦P_array⟧ is what the arrays must produce while lit: the bus load plus enough surplus to refill the batteries for the next eclipse, allowing for round-trip losses. With no eclipse it equals bus power. ⟦⟦P_array = P_bus (1 + frac{f_e}{f_d η_rt})⟧⟧",
+ r_Aarray:"Array area ⟦A_array⟧ is the deployed area needed at the chosen efficiency and derate. It is the largest single surface on the station and most of the planform that catches drag. ⟦⟦A_array = frac{P_array}{1361~“W/m²” × η_cell × “derate”}⟧⟧",
+ r_marray:"Array mass ⟦m_array = frac{P_array}{“specific power”}⟧. It usually dominates the non-compute mass unless radiators run cold.",
+ r_Ebatt:"Battery capacity ⟦E_batt⟧ is the installed watt-hours required to carry the bus load through the longest eclipse while never discharging below the chosen DoD. ⟦⟦E_batt = frac{P_bus t_eclipse}{DoD}⟧⟧",
+ r_mbatt:"Battery mass ⟦m_batt = frac{E_batt}{“specific energy”}⟧. It vanishes in a no-eclipse (β = 90°) orbit and is largest at β = 0° in low orbits.",
+ r_Eyr:"Annual energy delivered ⟦E_yr = P × 8 766~“h”⟧ is the IT energy the station supplies per year at full utilisation. It is the denominator of cost per IT-kWh and of carbon intensity per kWh.",
+ r_Q:"Heat to reject ⟦Q = P_bus⟧ equals bus power: by conservation of energy every watt the arrays feed in, including conversion losses, ends up as heat that only radiation can remove in vacuum.",
+ r_q:"Net radiated flux ⟦q = 2 ε σ (T_rad^4 − T_sink^4)⟧ is the watts per square metre a two-sided radiator sheds at the given radiator temperature, emissivity and effective sink temperature (⟦σ⟧ is the Stefan–Boltzmann constant). It falls steeply as the radiator cools or the sink warms, and is zero or negative when ⟦T_rad ≤ T_sink⟧.",
+ r_Trad:"Radiator temperature ⟦T_rad = T_chip − ΔT⟧ is chip junction temperature minus the junction-to-radiator thermal drop, in kelvin. Because flux scales with ⟦T_rad^4⟧, a 20 K change moves radiator area by roughly a quarter.",
+ r_Arad:"Radiator area ⟦A_rad = frac{Q}{q}⟧: heat to reject divided by net flux per square metre. It is shown alongside array area because both are large deployable sheets that add mass and drag; a cold-radiator warning fires when ⟦T_rad⟧ is below about 290 K.",
+ r_mrad:"Radiator mass ⟦m_rad = A_rad × “areal density”⟧, covering panels, fluid loops and pumps.",
  r_ratio:"Radiator-to-array area ratio compares the two big surfaces. Arrays convert roughly a quarter of ~1 kW/m²; radiators shed a few hundred W/m² at typical temperatures; so the ratio depends mainly on chip temperature, thermal drop and sink temperature.",
- r_mcomp:"Compute hardware mass m_comp = IT load in kW × kg per kW — the GPUs, boards, memory, networking and their mechanical support.",
- r_mstruct:"Structure mass m_struct = structural overhead fraction × (compute + array + battery + radiator mass): trusses, booms, harness, avionics and shielding.",
- r_mdry:"Dry mass m_dry is everything except propellant: compute, arrays, batteries, radiators and structure. The non-compute part of it is what the spacecraft-hardware cost and embodied-carbon figures are charged on.",
- r_mprop:"Station-keeping propellant m_prop = annual propellant × design life, launched up front so the station can cancel drag for its whole life. Thruster exhaust velocity v_e = I_sp·g₀ sets how much is needed.",
- r_mtotal:"Total launched mass m_total = dry mass + lifetime propellant: what must be lifted to orbit for one station. It sets launch count, launch cost, launch CO₂ and the ballistic coefficient used for decay lifetime; the fleet figure multiplies it by N.",
- r_Aproj:"Projected drag area A_proj = fraction × (array area + radiator area): the average area presented to the oncoming atmosphere by the two big sheets, the compute body being negligible by comparison.",
- r_FD:"Drag force F_D = ½ ρ v² C_d A_proj is the aerodynamic force the thrusters must continuously cancel. Its product with time and exhaust velocity gives propellant; its product with v gives the power lost.",
- r_PD:"Drag power dissipated P_D = F_D × v is the rate at which the atmosphere removes orbital energy from the station — the minimum power any propulsion must restore. Electric thrusters need more because their exhaust is much faster than the orbit.",
- r_dv:"ΔV lost per year is the velocity change drag would impose on the station over a year, F_D × year ÷ total mass — the ΔV the thrusters must supply. Starlink-class satellites budget tens of m/s per year.",
- r_Pthr:"Thruster power P_thr = F_D × v_e / (2 η_thr) is the electrical power needed to produce a thrust equal to drag with exhaust velocity v_e at the given thruster efficiency. Its ratio to IT load is the boost overhead in the hero tiles; above a few percent the station is drag-dominated.",
- r_Eboost:"Boost energy per year E_boost = thruster power × one year, also reported as a percentage of annual IT energy. It is the electrical price of staying up; the array is not enlarged for it in this model.",
- r_mdot:"Propellant per year ṁ·yr = F_D / v_e × one year: the propellant consumed cancelling drag, also reported as a fraction of station mass. It sets lifetime propellant and the resupply line in upkeep.",
- r_tdecay:"Decay lifetime t_decay is how long the station would take to fall from its altitude to 150 km if the thrusters failed, integrating da/dt = −ρ (C_d A/m) √(μ a) through the standard atmosphere with the solar-activity multiplier. Large light sheets have low ballistic coefficients and decay fast.",
- r_nL:"Launches n_L = ceil(total launched mass ÷ payload per launch) per station; for the fleet, stations are packed by mass into whole launches. Light stations share a launch, so the per-station card also shows stations per launch.",
- r_CL:"Launch cost C_L = total launched mass × launch price per kg. It is usually the largest term in orbit capex and the one the orbital premise depends on most.",
- r_eps:"Ideal orbital energy per kg ε = μ/R_E − μ/(2r) is the specific energy difference between resting on Earth's surface and circular orbit at radius r — kinetic plus potential, with no credit for Earth's rotation and no gravity, drag or steering losses. About 9 kWh/kg in LEO.",
- r_Eideal:"Ideal launch energy E_ideal = ε × total launched mass is the thermodynamic minimum to place the station in orbit. The comparison with chemical energy burned shows how far real rockets are from that floor.",
- r_Echem:"Chemical energy burned E_chem = propellant per launch × methane fraction × 50 MJ/kg × number of launches (whole launches, not prorated). This is the fuel energy of the campaign, which the station's own output is compared against.",
- r_payback:"Launch energy payback t_payback = chemical energy burned ÷ IT load: how long the station must run at full power to produce as much energy as its launches consumed. An energy-return sanity check, not a financial one.",
- r_fleetP:"Fleet power N·P is the number of stations times IT power per station — the total compute load the constellation delivers.",
- r_fleetArea:"Fleet array and radiator areas are the per-station areas times N. They give the total deployed surface in orbit, which matters for brightness, collision cross-section and the scale of the manufacturing task.",
- r_co2hw:"Embodied CO₂ of compute hardware E_hw = IT kW × embodied kgCO₂/kW. Charged once to both sides, and again with each replacement.",
- r_co2bus:"Embodied CO₂ of spacecraft hardware E_bus = non-compute dry mass × kgCO₂/kg. Orbit only; ground's counterpart is the facility's embodied carbon.",
- r_co2fac:"Embodied CO₂ of the ground facility E_fac = IT kW × kgCO₂/kW × (design life ÷ 15 years): the share of the building's embodied carbon attributable to this hardware generation.",
- r_co2launch:"Launch CO₂ E_L is the station's mass share of its launches' emissions: per-launch CO₂ = propellant × methane fraction × 2.75 × lifecycle multiplier × altitude multiplier, times total launched mass ÷ payload. Prorating by mass avoids rounding a small station up to a whole launch.",
- r_co2up:"Upkeep CO₂ E_up per year: on the orbit side the launch emissions of propellant resupply plus the embodied and launch emissions of replaced hardware; on the ground side the embodied emissions of the 2 %/yr of hardware repaired or replaced.",
- r_co2op:"Operational CO₂ E_op is the emission from running the hardware: zero for orbit (solar power) and IT kWh × PUE × grid intensity per year for ground. It is normally the ground side's largest line.",
+ r_mcomp:"Compute hardware mass ⟦m_comp = P × “kg/kW”⟧ — the GPUs, boards, memory, networking and their mechanical support.",
+ r_mstruct:"Structure mass ⟦m_struct = f_struct (m_comp + m_array + m_batt + m_rad)⟧: trusses, booms, harness, avionics and shielding.",
+ r_mdry:"Dry mass ⟦m_dry⟧ is everything except propellant: compute, arrays, batteries, radiators and structure. The non-compute part of it is what the spacecraft-hardware cost and embodied-carbon figures are charged on.",
+ r_mprop:"Station-keeping propellant ⟦m_prop = ṁ × t_life⟧ is annual propellant times design life, launched up front so the station can cancel drag for its whole life. Thruster exhaust velocity ⟦v_e = I_sp g_0⟧ sets how much is needed.",
+ r_mtotal:"Total launched mass ⟦m_total = m_dry + m_prop⟧: what must be lifted to orbit for one station. It sets launch count, launch cost, launch CO₂ and the ballistic coefficient used for decay lifetime; the fleet figure multiplies it by ⟦N⟧.",
+ r_Aproj:"Projected drag area ⟦A_proj = f_proj (A_array + A_rad)⟧: the average area presented to the oncoming atmosphere by the two big sheets, the compute body being negligible by comparison.",
+ r_FD:"Drag force ⟦F_D = ½ ρ v^2 C_d A_proj⟧ is the aerodynamic force the thrusters must continuously cancel. Its product with time and exhaust velocity gives propellant; its product with ⟦v⟧ gives the power lost.",
+ r_PD:"Drag power dissipated ⟦P_D = F_D v⟧ is the rate at which the atmosphere removes orbital energy from the station — the minimum power any propulsion must restore. Electric thrusters need more because their exhaust is much faster than the orbit.",
+ r_dv:"⟦Δv⟧ lost per year is the velocity change drag would impose on the station over a year, ⟦Δv = frac{F_D · 1~“yr”}{m_total}⟧ — the ⟦Δv⟧ the thrusters must supply. Starlink-class satellites budget tens of m/s per year.",
+ r_Pthr:"Thruster power ⟦P_thr⟧ is the electrical power needed to produce a thrust equal to drag with exhaust velocity ⟦v_e⟧ at the given thruster efficiency. Its ratio to IT load is the boost overhead in the hero tiles; above a few percent the station is drag-dominated. ⟦⟦P_thr = frac{F_D v_e}{2 η_thr}⟧⟧",
+ r_Eboost:"Boost energy per year ⟦E_boost = P_thr · 1~“yr”⟧, also reported as a percentage of annual IT energy. It is the electrical price of staying up; the array is not enlarged for it in this model.",
+ r_mdot:"Propellant per year ⟦ṁ · 1~“yr” = frac{F_D}{v_e} · 1~“yr”⟧: the propellant consumed cancelling drag, also reported as a fraction of station mass. It sets lifetime propellant and the resupply line in upkeep.",
+ r_tdecay:"Decay lifetime ⟦t_decay⟧ is how long the station would take to fall from its altitude to 150 km if the thrusters failed, integrating the decay rate below through the standard atmosphere with the solar-activity multiplier. Large light sheets have low ballistic coefficients and decay fast. ⟦⟦frac{d a}{d t} = −ρ frac{C_d A}{m} sqrt{μ a}⟧⟧",
+ r_nL:"Launches ⟦n_L = ⌈frac{m_total}{m_payload}⌉⟧ per station; for the fleet, stations are packed by mass into whole launches. Light stations share a launch, so the per-station card also shows stations per launch.",
+ r_CL:"Launch cost ⟦C_L = m_total × “$/kg”⟧. It is usually the largest term in orbit capex and the one the orbital premise depends on most.",
+ r_eps:"Ideal orbital energy per kg ⟦ε⟧ is the specific energy difference between resting on Earth's surface and circular orbit at radius ⟦r⟧ — kinetic plus potential, with no credit for Earth's rotation and no gravity, drag or steering losses. About 9 kWh/kg in LEO. ⟦⟦ε = frac{μ}{R_E} − frac{μ}{2 r}⟧⟧",
+ r_Eideal:"Ideal launch energy ⟦E_ideal = ε m_total⟧ is the thermodynamic minimum to place the station in orbit. The comparison with chemical energy burned shows how far real rockets are from that floor.",
+ r_Echem:"Chemical energy burned ⟦E_chem = m_propellant f_{CH₄} × 50~“MJ/kg” × n_L⟧: propellant per launch × methane fraction × 50 MJ/kg × number of launches (whole launches, not prorated). This is the fuel energy of the campaign, which the station's own output is compared against.",
+ r_payback:"Launch energy payback ⟦t_payback = frac{E_chem}{P}⟧: how long the station must run at full power to produce as much energy as its launches consumed. An energy-return sanity check, not a financial one.",
+ r_fleetP:"Fleet power ⟦N·P⟧ is the number of stations times IT power per station — the total compute load the constellation delivers.",
+ r_fleetArea:"Fleet array and radiator areas are the per-station areas times ⟦N⟧. They give the total deployed surface in orbit, which matters for brightness, collision cross-section and the scale of the manufacturing task.",
+ r_co2hw:"Embodied CO₂ of compute hardware ⟦E_hw = P × “kgCO₂/kW”⟧. Charged once to both sides, and again with each replacement.",
+ r_co2bus:"Embodied CO₂ of spacecraft hardware ⟦E_bus = (m_dry − m_comp) × “kgCO₂/kg”⟧. Orbit only; ground's counterpart is the facility's embodied carbon.",
+ r_co2fac:"Embodied CO₂ of the ground facility ⟦E_fac = P × “kgCO₂/kW” × frac{t_life}{15~“yr”}⟧: the share of the building's embodied carbon attributable to this hardware generation.",
+ r_co2launch:"Launch CO₂ ⟦E_L⟧ is the station's mass share of its launches' emissions: per-launch CO₂ ⟦E_launch = m_propellant f_{CH₄} × 2.75 × k_lifecycle k_altitude⟧, prorated as ⟦E_L = E_launch frac{m_total}{m_payload}⟧. Prorating by mass avoids rounding a small station up to a whole launch.",
+ r_co2up:"Upkeep CO₂ ⟦E_up⟧ per year: on the orbit side the launch emissions of propellant resupply plus the embodied and launch emissions of replaced hardware; on the ground side the embodied emissions of the 2 %/yr of hardware repaired or replaced.",
+ r_co2op:"Operational CO₂ ⟦E_op⟧ is the emission from running the hardware: zero for orbit (solar power) and ⟦E_op = E_yr × PUE × ci⟧ per year for ground. It is normally the ground side's largest line.",
  r_co2life:"Lifetime CO₂ is the sum of embodied, launch and operational emissions over the design life for each side: hardware + spacecraft + launch + life × (resupply + replacement) for orbit; hardware + facility share + life × (electricity + repairs) for ground.",
- r_co2int:"Carbon intensity per kWh is lifetime CO₂ ÷ lifetime IT kWh, in gCO₂/kWh — the figure the Planet's verdict compares. The break-even grid intensity ci* is the grid carbon intensity at which ground's figure would equal orbit's; a grid cleaner than that makes orbit the worse option.",
- r_cprice:"Carbon cost C_CO₂ = carbon price × annual CO₂e for each side, added to annual cost and LCOC. It converts the compliance carbon price into dollars; it does not reduce emissions.",
- r_offset:"Offset credits: both sides buy credits for the same share of their annual CO₂e at the credit price, and the bill C_off = share × price × tonnes enters annual cost. Q_off is the tonnes bought per year. Net intensity I_net = gross intensity × (1 − share × integrity) is what remains on the books once the credits are discounted for integrity.",
+ r_co2int:"Carbon intensity per kWh is lifetime CO₂ ÷ lifetime IT kWh, in gCO₂/kWh — the figure the Planet's verdict compares. The break-even grid intensity ⟦ci^*⟧ is the grid carbon intensity at which ground's figure would equal orbit's; a grid cleaner than that makes orbit the worse option.",
+ r_cprice:"Carbon cost ⟦C_{CO₂}⟧ = carbon price × annual CO₂e for each side, added to annual cost and LCOC. It converts the compliance carbon price into dollars; it does not reduce emissions.",
+ r_offset:"Offset credits: both sides buy credits for the same share of their annual CO₂e at the credit price, and the bill ⟦C_off⟧ = share × price × tonnes enters annual cost. ⟦Q_off⟧ is the tonnes bought per year. Net intensity ⟦I_net = I (1 − “share” × “integrity”)⟧ is what remains on the books once the credits are discounted for integrity.",
  r_water:"Water footprint over the design life. Orbit: fab water for the hardware and its replacements only. Ground: fab water plus on-site cooling (WUE) and the water evaporated generating its electricity (PUE × L/kWh). Reported both as total litres and per IT-kWh.",
  r_land:"Land use for the ground datacenter: a rough 0.3 m² per kW of IT, scaled by PUE and tripled for substation, generators and setbacks. Orbit uses no land, but see debris and night sky.",
  r_debris:"Orbital debris and collision risk are not quantified. A million-station constellation of km²-scale sheets multiplies conjunctions and, if a cascade began, could make the altitude band unusable (Kessler syndrome). Listed to keep the omission visible.",
@@ -504,33 +565,34 @@ const DESC={
  r_grid:"Grid strain, noise and diesel backup are ground-only externalities: large interconnections raise local rates and defer other users, cooling plant is loud, and backup generators emit locally. Orbit avoids all three, which is part of its political appeal.",
  r_verdictC:"The Investor's verdict compares levelized cost per IT-kWh, orbit against the ground baseline, including each side's opportunity cost of waiting for power. Within ±15 % is called marginal because that is well inside the uncertainty of the inputs; below 0.85× is viable, above 1.15× is not.",
  r_verdictE:"The Planet's verdict compares lifetime CO₂e per IT-kWh with the same ±15 % band: greener, comparable or worse. If both sides fully offset with perfect-integrity credits it reads “neutralised on paper” and the difference becomes a bill rather than emissions. Water, debris and sky are reported but do not drive the verdict.",
- r_Chw:"Compute hardware cost C_hw = IT kW × $/kW, the IT purchase. Identical for both sides; the ground card shows it annualized with the capital-recovery factor.",
- r_Csub:"Tax incentives C_sub = subsidy rate × (annualized hardware + facility + electricity), subtracted from the ground total. The electricity part scales with the power price, which is why the break-even price formula nets it out.",
- r_Cpol:"Political and community overhead C_pol = political overhead rate × facility capex per year: lobbying, PACs, community payments and legal costs of holding a ground site.",
- r_Cdelay:"Permitting delay and block risk C_delay: half the facility capex is carried at the cost of capital for the expected time to power, plus the expected write-off of blocked attempts (p/(1−p) × 8 % of facility capex); the sum is annualized over 15 years like the facility itself.",
- r_Ctime:"Opportunity cost of time to power C_time = base annual cost × ((1 − x)^−D − 1), where x is the value-decay rate and D the years to power. It is the extra each side must earn to deliver compute worth as much as compute delivered today, booked on top of the plain bill. Orbit's D is licensing plus the launch campaign; ground's is permitting with block risk.",
- r_tpower:"Time to power t_power: for the fleet, licensing lead time + fleet launches ÷ launch cadence; for ground, permitting and interconnection delay × (1 + 0.5·p/(1−p)) to allow for re-siting after a blocked attempt. Both feed the opportunity cost of waiting.",
- r_Cbus:"Spacecraft hardware cost C_bus = non-compute dry mass × $/kg — arrays, radiators, batteries and structure, priced per kilogram.",
- r_Ccapex:"Total capex C_capex = compute hardware + spacecraft hardware + launch for one station; the fleet figure multiplies by N. The ground side's capital is hardware plus facility, shown annualized.",
- r_CRF:"Annualized capex CRF·C_capex spreads the up-front investment over the design life at the cost of capital, with CRF = i / (1 − (1+i)^−n). It is the capital line in annual cost and LCOC.",
- r_Cprop:"Propellant resupply cost C_prop = propellant per year × launch $/kg: the cost of launching the next year's station-keeping propellant. The propellant itself is negligible next to the launch bill.",
- r_Crepl:"Replacement cost C_repl = failure rate × (compute hardware cost + compute mass × launch $/kg): failed hardware is written off and a new unit bought and launched each year in that proportion.",
- r_Cops:"Operations cost C_ops = ops rate × capex. For orbit it covers mission control, ground stations and insurance; for ground the same rate is applied to hardware plus facility and a flat 2 %/yr of hardware cost is added for repairs.",
- r_Cup:"Total upkeep C_upkeep is orbit's recurring cost: propellant resupply + replacement + operations + carbon cost + offset credits. It is what the fleet must keep paying every year after launch, excluding capital recovery.",
- r_Cyr:"Total annual cost C_yr = annualized capex + upkeep + opportunity cost of time (orbit), or annualized hardware + facility + electricity + ops and repairs − tax incentives + political overhead + delay cost + carbon + offsets + opportunity cost (ground). Divided by IT kWh it gives LCOC.",
- r_LCOC:"Levelized cost per IT-kWh (LCOC) = total annual cost ÷ IT kWh delivered per year — the price per kilowatt-hour of compute each side would have to charge to recover its costs, the analogue of levelized cost of electricity. The orbit/ground ratio is the Investor's verdict; the “before pricing time” value excludes the opportunity cost.",
- r_Cfac:"Facility cost C_fac = IT kW × facility $/kW annualized over a 15-year building life at the cost of capital, so a 5-year hardware generation carries only a third of the building.",
- r_Celec:"Electricity cost C_elec = IT kWh × PUE × price per kWh: the ground datacenter's power bill including cooling overhead. It is the main recurring cost orbit avoids.",
- r_pstar:"Break-even ground electricity price p* is the grid price at which ground's time-adjusted annual cost equals orbit's, found by solving the ground cost equation for the price with the electricity subsidy netted out. If orbit is cheaper even with free power the field says so; a p* far above market prices means orbit is far from competitive.",
+ r_Chw:"Compute hardware cost ⟦C_hw = P × “$/kW”⟧, the IT purchase. Identical for both sides; the ground card shows it annualized with the capital-recovery factor.",
+ r_Csub:"Tax incentives ⟦C_sub = s_tax (CRF·C_hw + C_fac + C_elec)⟧, subtracted from the ground total. The electricity part scales with the power price, which is why the break-even price formula nets it out.",
+ r_Cpol:"Political and community overhead ⟦C_pol = r_pol × “facility capex”⟧ per year: lobbying, PACs, community payments and legal costs of holding a ground site.",
+ r_Cdelay:"Permitting delay and block risk ⟦C_delay⟧: half the facility capex is carried at the cost of capital for the expected time to power, plus the expected write-off of blocked attempts (⟦frac{p}{1 − p} × 8 %⟧ of facility capex); the sum is annualized over 15 years like the facility itself.",
+ r_Ctime:"Opportunity cost of time to power ⟦C_time⟧ is the extra each side must earn to deliver compute worth as much as compute delivered today, booked on top of the plain bill, where ⟦x⟧ is the value-decay rate and ⟦D⟧ the years to power. Orbit's ⟦D⟧ is licensing plus the launch campaign; ground's is permitting with block risk. ⟦⟦C_time = C_yr ((1 − x)^{−D} − 1)⟧⟧",
+ r_tpower:"Time to power ⟦t_power⟧: for the fleet, licensing lead time plus the launch campaign; for ground, the permitting and interconnection delay stretched by the block probability ⟦p⟧ to allow for re-siting after a blocked attempt. Both feed the opportunity cost of waiting. ⟦⟦t_{power,orbit} = t_licence + frac{n_L}{“cadence”}⟧⟧ ⟦⟦t_{power,ground} = t_permit (1 + frac{p}{2 (1 − p)})⟧⟧",
+ r_Cbus:"Spacecraft hardware cost ⟦C_bus = (m_dry − m_comp) × “$/kg”⟧ — arrays, radiators, batteries and structure, priced per kilogram.",
+ r_Ccapex:"Total capex ⟦C_capex = C_hw + C_bus + C_L⟧ for one station; the fleet figure multiplies by ⟦N⟧. The ground side's capital is hardware plus facility, shown annualized.",
+ r_CRF:"Annualized capex ⟦CRF·C_capex⟧ spreads the up-front investment over the design life at the cost of capital, with the capital-recovery factor for rate ⟦i⟧ over ⟦n⟧ years. It is the capital line in annual cost and LCOC. ⟦⟦CRF = frac{i}{1 − (1 + i)^{−n}}⟧⟧",
+ r_Cprop:"Propellant resupply cost ⟦C_prop = ṁ · 1~“yr” × “$/kg”⟧: the cost of launching the next year's station-keeping propellant. The propellant itself is negligible next to the launch bill.",
+ r_Crepl:"Replacement cost ⟦C_repl = f_fail (C_hw + m_comp × “$/kg”)⟧: failed hardware is written off and a new unit bought and launched each year in that proportion.",
+ r_Cops:"Operations cost ⟦C_ops = r_ops × C_capex⟧. For orbit it covers mission control, ground stations and insurance; for ground the same rate is applied to hardware plus facility and a flat 2 %/yr of hardware cost is added for repairs.",
+ r_Cup:"Total upkeep ⟦C_upkeep = C_prop + C_repl + C_ops + C_{CO₂} + C_off⟧ is orbit's recurring cost: propellant resupply, replacement, operations, carbon cost and offset credits. It is what the fleet must keep paying every year after launch, excluding capital recovery.",
+ r_Cyr:"Total annual cost ⟦C_yr = CRF·C_capex + C_upkeep + C_time⟧ (orbit), or annualized hardware + facility + electricity + ops and repairs − tax incentives + political overhead + delay cost + carbon + offsets + opportunity cost (ground). Divided by IT kWh it gives LCOC.",
+ r_LCOC:"Levelized cost per IT-kWh ⟦LCOC = frac{C_yr}{E_yr}⟧ — the price per kilowatt-hour of compute each side would have to charge to recover its costs, the analogue of levelized cost of electricity. The orbit/ground ratio is the Investor's verdict; the “before pricing time” value excludes the opportunity cost.",
+ r_Cfac:"Facility cost ⟦C_fac = CRF_15 × P × “$/kW”⟧ is the facility capex annualized over a 15-year building life at the cost of capital, so a 5-year hardware generation carries only a third of the building.",
+ r_Celec:"Electricity cost ⟦C_elec = E_yr × PUE × p⟧: the ground datacenter's power bill including cooling overhead. It is the main recurring cost orbit avoids.",
+ r_pstar:"Break-even ground electricity price ⟦p^*⟧ is the grid price at which ground's time-adjusted annual cost equals orbit's, found by solving the ground cost equation for the price with the electricity subsidy netted out. If orbit is cheaper even with free power the field says so; a ⟦p^*⟧ far above market prices means orbit is far from competitive.",
 };
 function openRefs(id){const r=REFS[id];if(!r)return;
-  document.getElementById("mtitle").textContent=r.t;
-  const d=document.getElementById("mdesc");d.textContent=DESC[id]||"";d.style.display=DESC[id]?"":"none";
+  document.getElementById("mtitle").innerHTML=esc(r.t).replace(/\(([^()]+)\)$/,(_,m)=>"("+mml(m)+")");
+  const d=document.getElementById("mdesc");d.innerHTML=rich(DESC[id]||"");d.style.display=DESC[id]?"":"none";
   document.getElementById("mlist").innerHTML=r.l.map(([t,u])=>`<li><a href="${u}" target="_blank" rel="noopener noreferrer">${t}<span>↗</span></a><div class="u">${u.replace(/^https?:\/\//,"")}</div></li>`).join("");
   document.getElementById("modal").style.display="flex";}
 function closeRefs(){document.getElementById("modal").style.display="none";}
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest(".ref");if(b){e.preventDefault();openRefs(b.dataset.ref);}});
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeRefs();});
+document.querySelectorAll(".notes li").forEach(li=>{li.innerHTML=richHTML(li.innerHTML);});
 
 
 // ---------- section icons (original line icons) ----------
@@ -602,7 +664,7 @@ const CTLS=[
  {g:"Politics & permitting",id:"pblock",label:"Probability a ground site is blocked",min:0,max:0.6,step:0.01,def:0.25,fmt:v=>(v*100).toFixed(0)+" %",note:"Data Center Watch: $18 B blocked of $64 B contested (28 %) to Q1 2025, then $198 B blocked or delayed in H1 2026. Voters rejected 40 of 41 data-center ballot measures on 3 Nov 2026. A blocked site forfeits ~8 % of facility capex and restarts the clock."},
  {g:"Politics & permitting",id:"cadence",label:"Launch cadence available to the fleet",min:1,max:Math.log10(3000),step:0.01,def:2,log:true,fmt:v=>fmtNum(v,0)+" launches/yr",note:"Falcon 9 flew ~165 times in 2025; Starship aspires to daily flights. Fleet deployment time = launches ÷ cadence."},
  {g:"Politics & permitting",id:"olic",label:"Orbit licensing lead time (FCC, ITU, FAA, debris rules)",min:0,max:5,step:0.25,def:1.5,fmt:v=>v.toFixed(2)+" yr",note:"SpaceX's million-satellite FCC filing is a political process too, and its S-1 lists regulatory approval as a risk — but there are no neighbourhood ballot measures in orbit."},
- {g:"Politics & permitting",id:"tval",label:"Value decay of late compute",min:0,max:0.5,step:0.01,def:0.30,fmt:v=>(v*100).toFixed(0)+" %/yr",note:"Hardware cost-performance improves ~30 %/yr, so compute delivered D years late is worth (1 − x)^D of compute delivered now. Turns each side's time-to-power into an opportunity-cost line in the economics (annual cost × ((1 − x)^−D − 1)), so the Investor's verdict prices time. Set 0 to ignore time."},
+ {g:"Politics & permitting",id:"tval",label:"Value decay of late compute",min:0,max:0.5,step:0.01,def:0.30,fmt:v=>(v*100).toFixed(0)+" %/yr",note:"Hardware cost-performance improves ~30 %/yr, so compute delivered ⟦D⟧ years late is worth ⟦(1 − x)^D⟧ of compute delivered now. Turns each side's time-to-power into an opportunity-cost line in the economics, ⟦C_yr ((1 − x)^{−D} − 1)⟧, so the Investor's verdict prices time. Set 0 to ignore time."},
  {g:"Environment",id:"ci",label:"Grid carbon intensity (ground power)",min:0,max:900,step:10,def:400,fmt:v=>v+" gCO₂/kWh",note:"World average ≈ 450; US ≈ 370; France ≈ 60; coal-heavy grids 700–900. Set 0 for a datacenter on dedicated renewables."},
  {g:"Environment",id:"cprice",label:"Carbon price (compliance)",min:0,max:300,step:5,def:0,fmt:v=>"$"+v+"/tCO₂",note:"Tax or allowance price applied to both orbit and ground annual emissions in the economics. EU ETS ≈ €82/t in late 2026; US federal = 0."},
  {g:"Environment",id:"offset",label:"Share of emissions covered by purchased credits",min:0,max:1,step:0.05,def:0,fmt:v=>(v*100).toFixed(0)+" %",note:"Both sides buy credits for this share of their annual CO₂e at the price below. 100 % = “net zero” on paper. The bill lands in the economics; the Planet's verdict then judges what is left after credits."},
@@ -634,7 +696,7 @@ function buildControls(){
       const w=document.createElement("div");w.className="ctl";
       w.innerHTML=`<div class="row"><label for="in_${c.id}">${c.label}${refBtn(c.id)}</label><output id="out_${c.id}"></output></div>
         <input type="range" id="in_${c.id}" min="${c.min}" max="${c.max}" step="${c.step}" value="${c.def}">
-        ${c.note?`<div class="note">${c.note}</div>`:""}`;
+        ${c.note?`<div class="note">${rich(c.note)}</div>`:""}`;
       body.appendChild(w);setExact(c,c.log?Math.pow(10,c.def):c.def);
       w.querySelector("input").addEventListener("input",()=>{delete exact[c.id];document.getElementById("presetNote").textContent="custom — edited from: "+PRESETS[document.getElementById("preset").value].n;update();});
     });
@@ -823,7 +885,7 @@ const flag=(t,c)=>`<span class="flag ${c}">${t}</span>`;
 
 // ---------- render ----------
 function tile(k,v,unit,sub){return`<div class="tile"><div class="k">${k}</div><div class="v">${v}${unit?`<small>${unit}</small>`:""}</div>${sub?`<div class="sub">${sub}</div>`:""}</div>`;}
-function kv(rows,total){return`<table class="kv">${rows.map(r=>`<tr${r[3]?' class="total"':''}><td>${r[0]}${r[2]?`<span class="f">${r[2]}</span>`:""}</td><td>${r[1]}</td></tr>`).join("")}</table>`;}
+function kv(rows,total){return`<table class="kv">${rows.map(r=>`<tr${r[3]?' class="total"':''}><td>${r[0]}${r[2]?`<span class="f">${rich(r[2])}</span>`:""}</td><td>${r[1]}</td></tr>`).join("")}</table>`;}
 
 function update(){
   CTLS.forEach(c=>{state[c.id]=val(c);document.getElementById("out_"+c.id).textContent=c.fmt(state[c.id]);});
@@ -841,27 +903,27 @@ function update(){
 
   document.getElementById("cards").innerHTML=
    `<div class="card"><h2>${ico("orbit")}Orbit</h2>${kv([
-      [R("Orbital radius","r","r_radius"),fmtNum((RE+m.h*1e3)/1e3,0)+" km","r = R_E + h"],
-      [R("Orbital velocity","v","r_v"),fmtNum(m.v/1e3,2)+" km/s","v = √(μ/r)"],
-      [R("Period","T","r_T"),fmtNum(m.T/60,1)+" min · "+fmtNum(86400/m.T,1)+" orbits/day","T = 2π√(r³/μ)"],
-      [R("Eclipse fraction","f_e","r_fe"),fmtNum(m.fe*100,1)+" % · "+fmtNum(eclMin,1)+" min/orbit","β = "+s.beta+"°"],
+      [R("Orbital radius","r","r_radius"),fmtNum((RE+m.h*1e3)/1e3,0)+" km","⟦r = R_E + h⟧"],
+      [R("Orbital velocity","v","r_v"),fmtNum(m.v/1e3,2)+" km/s","⟦v = sqrt{frac{μ}{r}}⟧"],
+      [R("Period","T","r_T"),fmtNum(m.T/60,1)+" min · "+fmtNum(86400/m.T,1)+" orbits/day","⟦T = 2π sqrt{frac{r^3}{μ}}⟧"],
+      [R("Eclipse fraction","f_e","r_fe"),fmtNum(m.fe*100,1)+" % · "+fmtNum(eclMin,1)+" min/orbit","⟦β⟧ = "+s.beta+"°"],
       [R("Atmospheric density","ρ","r_rho"),m.rho.toExponential(2)+" kg/m³","×"+s.solar.toFixed(2)+" solar activity"],
     ])}</div>
     <div class="card"><h2>${ico("power")}Power</h2>${kv([
       [R("IT load","P","r_P"),fmtSI(m.P,"W")],
-      [R("Bus power incl. conversion loss","P_bus","r_Pbus"),fmtSI(m.Pbus,"W"),"P / η_pcu"],
-      [R("Array output in sunlight","P_array","r_Parray"),fmtSI(m.Parray,"W"),"P_bus·(1 + f_e/(f_d·η_rt))"],
+      [R("Bus power incl. conversion loss","P_bus","r_Pbus"),fmtSI(m.Pbus,"W"),"⟦P_bus = frac{P}{η_pcu}⟧"],
+      [R("Array output in sunlight","P_array","r_Parray"),fmtSI(m.Parray,"W"),"⟦P_array = P_bus (1 + frac{f_e}{f_d η_rt})⟧"],
       [R("Array area","A_array","r_Aarray"),fmtArea(m.arrayArea),fmtNum(SOLAR*s.eff/100*s.derate,0)+" W/m² effective"],
       [R("Array mass","m_array","r_marray"),fmtMass(m.arrayMass),s.spw+" W/kg"],
-      [R("Battery capacity","E_batt","r_Ebatt"),fmtEnergy(m.battWh*3600),"P_bus·t_eclipse / DoD"],
+      [R("Battery capacity","E_batt","r_Ebatt"),fmtEnergy(m.battWh*3600),"⟦E_batt = frac{P_bus t_eclipse}{DoD}⟧"],
       [R("Battery mass","m_batt","r_mbatt"),fmtMass(m.battMass),s.bse+" Wh/kg"],
-      [R("Annual energy delivered","E_yr","r_Eyr"),fmtEnergy(m.annualEnergy),"P × 8766 h"],
+      [R("Annual energy delivered","E_yr","r_Eyr"),fmtEnergy(m.annualEnergy),'⟦E_yr = P × 8766~“h”⟧'],
     ])}</div>
     <div class="card"><h2>${ico("thermal")}Thermal</h2>${kv([
       [R("Heat to reject","Q","r_Q"),fmtSI(m.Q,"W"),"= bus power (all of it becomes heat)"],
-      [R("Radiator temperature","T_rad","r_Trad"),fmtNum(m.trad,0)+" K ("+fmtNum(m.trad-273.15,0)+" °C)","T_chip − ΔT = "+s.tchip+" °C − "+s.dT+" K"],
-      [R("Net radiated flux","q","r_q"),fmtNum(m.radFlux,0)+" W/m² (both sides)","2εσ(T_rad⁴ − T_sink⁴)"],
-      [R("Radiator area","A_rad","r_Arad"),fmtArea(m.radArea)],
+      [R("Radiator temperature","T_rad","r_Trad"),fmtNum(m.trad,0)+" K ("+fmtNum(m.trad-273.15,0)+" °C)","⟦T_rad = T_chip − ΔT⟧ = "+s.tchip+" °C − "+s.dT+" K"],
+      [R("Net radiated flux","q","r_q"),fmtNum(m.radFlux,0)+" W/m² (both sides)","⟦q = 2 ε σ (T_rad^4 − T_sink^4)⟧"],
+      [R("Radiator area","A_rad","r_Arad"),fmtArea(m.radArea),"⟦A_rad = frac{Q}{q}⟧"],
       [R("Radiator mass","m_rad","r_mrad"),fmtMass(m.radMass),s.rad_kg+" kg/m²"],
       [R("Radiator : array area","A_rad/A_array","r_ratio"),fmtNum(m.radArea/m.arrayArea,2)+" : 1"],
     ])}</div>
@@ -877,12 +939,12 @@ function update(){
     ])}</div>
     <div class="card"><h2>${ico("drag")}Drag &amp; station-keeping</h2>${kv([
       [R("Projected drag area","A_proj","r_Aproj"),fmtArea(m.dragArea),(s.afrac*100).toFixed(0)+" % of "+fmtArea(m.planform)+" planform"],
-      [R("Drag force","F_D","r_FD"),fmtSI(m.F,"N"),"½ρv²C_dA"],
-      [R("Drag power dissipated","P_D","r_PD"),fmtSI(m.dragPower,"W"),"F·v"],
-      [R("ΔV lost per year","Δv","r_dv"),fmtNum(m.dv,1)+" m/s"],
-      [R("Thruster power needed","P_thr","r_Pthr"),fmtSI(m.thrustPower,"W"),"F·v_e / (2η)"],
+      [R("Drag force","F_D","r_FD"),fmtSI(m.F,"N"),"⟦F_D = ½ ρ v^2 C_d A_proj⟧"],
+      [R("Drag power dissipated","P_D","r_PD"),fmtSI(m.dragPower,"W"),"⟦P_D = F_D v⟧"],
+      [R("ΔV lost per year","Δv","r_dv"),fmtNum(m.dv,1)+" m/s",'⟦Δv = frac{F_D · 1~“yr”}{m_total}⟧'],
+      [R("Thruster power needed","P_thr","r_Pthr"),fmtSI(m.thrustPower,"W"),"⟦P_thr = frac{F_D v_e}{2 η_thr}⟧"],
       [R("Boost energy per year","E_boost","r_Eboost"),fmtEnergy(m.boostEnergyYr),fmtNum(m.boostFrac*100,2)+" % of IT energy"],
-      [R("Propellant per year","ṁ·yr","r_mdot"),fmtMass(m.propYr),fmtNum(m.propYr/m.totalMass*100,2)+" % of station mass"],
+      [R("Propellant per year","ṁ·yr","r_mdot"),fmtMass(m.propYr),"⟦ṁ = frac{F_D}{v_e}⟧ · "+fmtNum(m.propYr/m.totalMass*100,2)+" % of station mass"],
       [R("Decay lifetime without boost","t_decay","r_tdecay"),fmtTime(m.lifetime),"to 150 km"],
     ])}</div>
     <div class="card"><h2>${ico("fleet")}Fleet<span>${fmtNum(m.N,0)} identical stations</span></h2>${kv([
@@ -900,7 +962,7 @@ function update(){
     <div class="card"><h2>${ico("launch")}Launch<span>per station</span></h2>${kv([
       [R("Launches per station","n_L","r_nL"),m.totalMass<=s.payload*1e3?"1 ("+fmtNum(m.perLaunch,0)+" stations per launch)":fmtNum(m.launches,0),s.payload+" t each"],
       [R("Launch cost per station","C_L","r_CL"),fmtMoney(m.cost),"$"+fmtNum(s.cost,0)+"/kg"],
-      [R("Ideal orbital energy per kg","ε","r_eps"),fmtNum(m.eIdealKg/3.6e6,1)+" kWh/kg","μ/R_E − μ/2r"],
+      [R("Ideal orbital energy per kg","ε","r_eps"),fmtNum(m.eIdealKg/3.6e6,1)+" kWh/kg","⟦ε = frac{μ}{R_E} − frac{μ}{2 r}⟧"],
       [R("Ideal energy, total","E_ideal","r_Eideal"),fmtEnergy(m.eIdeal),"= "+fmtTime(m.eIdeal/m.P)+" of station output"],
       [R("Chemical energy burned","E_chem","r_Echem"),fmtEnergy(m.eChem),fmtEnergy(m.eChemLaunch)+" per launch, "+fmtNum(m.launches,0)+" launch(es)"],
       [R("Launch energy payback","t_payback","r_payback"),fmtTime(m.eChem/m.P),"station output to equal fuel burned (whole launches)"],
@@ -929,7 +991,7 @@ function update(){
         [R("Carbon intensity","I_ground","r_co2int"),fmtNum(m.co2GroundInt,0)+" gCO₂/kWh","orbit is "+fmtNum(m.envRatio,2)+"× ground",true],
         [R("Credits bought, per year","Q_off","r_offset"),s.offset>0?fmtMass(m.credGroundYr)+" CO₂/yr":"none",s.offset>0?(s.offset*100).toFixed(0)+" % × $"+fmtNum(s.oprice,0)+"/t = "+fmtMoney(m.offsetGround)+"/yr":"offset share = 0"],
         [R("Net intensity after credits","I_net","r_offset"),fmtNum(m.co2GroundNet,0)+" gCO₂/kWh","ratio unchanged: both sides offset the same share"],
-        [R("Break-even grid intensity","ci*","r_co2int"),m.ciBreakeven>0?fmtNum(m.ciBreakeven,0)+" gCO₂/kWh":"none","ground grid cleaner than this → orbit loses"],
+        [R("Break-even grid intensity","ci^*","r_co2int"),m.ciBreakeven>0?fmtNum(m.ciBreakeven,0)+" gCO₂/kWh":"none","ground grid cleaner than this → orbit loses"],
         [R("Carbon cost in economics","C_CO₂","r_cprice"),fmtMoney(m.carbonOrbit)+" vs "+fmtMoney(m.carbonGround)+"/yr","$"+s.cprice+"/t"],
       ])}</div>
       <div>${kv([
@@ -955,7 +1017,7 @@ function update(){
         [R("Spacecraft hardware","C_bus","r_Cbus"),fmtMoney(m.capBus),fmtMass(m.dryMass-m.compMass)+" × $"+fmtNum(s.buscost,0)+"/kg"],
         [R("Launch","C_L","r_CL"),fmtMoney(m.capLaunch),fmtMass(m.totalMass)+" × $"+fmtNum(s.cost,0)+"/kg"],
         [R("Total capex","C_capex","r_Ccapex"),fmtMoney(m.capex),fmtMoney(m.capex/(m.P/1e6))+" per MW",true],
-        [R("Annualized capex","CRF·C_capex","r_CRF"),fmtMoney(m.annCapex)+"/yr","CRF "+(m.crf*100).toFixed(1)+" % over "+s.life+" yr at "+(s.wacc*100).toFixed(1)+" %"],
+        [R("Annualized capex","CRF·C_capex","r_CRF"),fmtMoney(m.annCapex)+"/yr","⟦CRF = frac{i}{1 − (1 + i)^{−n}}⟧ = "+(m.crf*100).toFixed(1)+" % over "+s.life+" yr at "+(s.wacc*100).toFixed(1)+" %"],
       ])}</div>
       <div>${kv([
         ["<b>Upkeep — orbit</b>",""],
@@ -965,7 +1027,7 @@ function update(){
         [R("Carbon price","C_CO₂","r_cprice"),fmtMoney(m.carbonOrbit)+"/yr","$"+s.cprice+"/t × "+fmtMass(m.co2OrbitYr)+"/yr"],
         [R("Offset credits","C_off","r_offset"),fmtMoney(m.offsetOrbit)+"/yr",(s.offset*100).toFixed(0)+" % × $"+fmtNum(s.oprice,0)+"/t × "+fmtMass(m.co2OrbitYr)+"/yr"],
         [R("Total upkeep","C_upkeep","r_Cup"),fmtMoney(m.upkeep)+"/yr","",true],
-        [R("Opportunity cost of time to power","C_time","r_Ctime"),fmtMoney(m.oppOrbit)+"/yr",fmtNum(m.tOrbit,1)+" yr to power ("+s.olic+" yr licensing + "+fmtNum(m.fleetLaunches,0)+" launches ÷ "+fmtNum(s.cadence,0)+"/yr) × "+(s.tval*100).toFixed(0)+" %/yr decay → ×"+fmtNum(m.tvOrbit,2)],
+        [R("Opportunity cost of time to power","C_time","r_Ctime"),fmtMoney(m.oppOrbit)+"/yr",fmtNum(m.tOrbit,1)+" yr to power ("+s.olic+" yr licensing + "+fmtNum(m.fleetLaunches,0)+" launches ÷ "+fmtNum(s.cadence,0)+"/yr) × "+(s.tval*100).toFixed(0)+" %/yr decay → ⟦(1 − x)^{−D}⟧ = "+fmtNum(m.tvOrbit,2)],
         [R("Total annual cost, orbit","C_yr","r_Cyr"),fmtMoney(m.annOrbit)+"/yr","capex + upkeep + opportunity cost",true],
         [R("Levelized cost per IT-kWh","LCOC","r_LCOC"),( "$"+m.lcocOrbit.toFixed(3)),"$"+m.lcocOrbitBase.toFixed(3)+" before pricing time; $"+fmtNum(m.lcocOrbit*1.2*8766,0)+" per 1.2 kW accelerator-year"],
       ])}</div>
@@ -980,10 +1042,10 @@ function update(){
         [R("Permitting delay & block risk","C_delay","r_Cdelay"),fmtMoney(m.gDelay)+"/yr",fmtNum(m.tGround,1)+" yr expected to power, "+(s.pblock*100).toFixed(0)+" % block risk"],
         [R("Carbon price","C_CO₂","r_cprice"),fmtMoney(m.carbonGround)+"/yr","$"+s.cprice+"/t × "+fmtMass(m.co2GroundYr)+"/yr"],
         [R("Offset credits","C_off","r_offset"),fmtMoney(m.offsetGround)+"/yr",(s.offset*100).toFixed(0)+" % × $"+fmtNum(s.oprice,0)+"/t × "+fmtMass(m.co2GroundYr)+"/yr"],
-        [R("Opportunity cost of time to power","C_time","r_Ctime"),fmtMoney(m.oppGround)+"/yr",fmtNum(m.tGround,1)+" yr to power (permits + interconnection, "+(s.pblock*100).toFixed(0)+" % block risk) × "+(s.tval*100).toFixed(0)+" %/yr decay → ×"+fmtNum(m.tvGround,2)],
-        [R("Total annual cost, ground","C_yr,ground","r_Cyr"),fmtMoney(m.annGround)+"/yr","incl. opportunity cost",true],
+        [R("Opportunity cost of time to power","C_time","r_Ctime"),fmtMoney(m.oppGround)+"/yr",fmtNum(m.tGround,1)+" yr to power (permits + interconnection, "+(s.pblock*100).toFixed(0)+" % block risk) × "+(s.tval*100).toFixed(0)+" %/yr decay → ⟦(1 − x)^{−D}⟧ = "+fmtNum(m.tvGround,2)],
+        [R("Total annual cost, ground","C_{yr,ground}","r_Cyr"),fmtMoney(m.annGround)+"/yr","incl. opportunity cost",true],
         [R("Levelized cost per IT-kWh","LCOC_ground","r_LCOC"),"$"+m.lcocGround.toFixed(3),"$"+m.lcocGroundBase.toFixed(3)+" before pricing time; orbit is "+fmtNum(m.commRatio,2)+"× ground ("+fmtNum(m.commRatioBase,2)+"× before time)"],
-        [R("Break-even ground electricity price","p*","r_pstar"),m.breakevenElec>0?"$"+m.breakevenElec.toFixed(3)+"/kWh":"none (orbit cheaper even with free power)","ground power price at which orbit matches"],
+        [R("Break-even ground electricity price","p^*","r_pstar"),m.breakevenElec>0?"$"+m.breakevenElec.toFixed(3)+"/kWh":"none (orbit cheaper even with free power)","ground power price at which orbit matches"],
       ])}</div>
       </div>
       <div id="chartEcon" style="margin-top:10px"></div>
@@ -1202,7 +1264,7 @@ function drawOrbit(m,s){ // called on every model update: static facts; the fram
   OV.f=orbitFrame(s,incl); OV.r=(RE+m.h*1e3)/RE;
   document.getElementById("obsOut").textContent=document.getElementById("obsLat").value+"°, "+document.getElementById("obsLon").value+"°";
   document.getElementById("orbitFacts").innerHTML=kv([
-    ["Altitude (h)",fmtNum(m.h,0)+" km"],["Orbit radius (r)",fmtNum(OV.r,2)+" R_E"],["Period (T)",fmtNum(m.T/60,1)+" min"],["Speed (v)",fmtNum(m.v/1e3,2)+" km/s"],
+    ["Altitude (h)",fmtNum(m.h,0)+" km"],["Orbit radius (r)",fmtNum(OV.r,2)+" "+mml("R_E")],["Period (T)",fmtNum(m.T/60,1)+" min"],["Speed (v)",fmtNum(m.v/1e3,2)+" km/s"],
     ["β (model / view)",s.beta+"° / "+fmtNum(OV.f.betaEff,0)+"°"+(OV.f.clamped?" ⚠ β unreachable at this i":"")],
     ["Sunlit / eclipsed",fmtNum(m.fd*m.T/60,1)+" / "+fmtNum(m.fe*m.T/60,1)+" min"],
     ["Ground-track drift",fmtNum(m.T*OMEGA_E*r2d,1)+"° west per orbit"],
