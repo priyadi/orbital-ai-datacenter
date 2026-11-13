@@ -8,6 +8,8 @@
 <meta name="author" content="Priyadi Iman Nurcahyo">
 <meta name="theme-color" content="#0e0f12">
 <link rel="canonical" href="https://priyadi.github.io/orbital-ai-datacenter/">
+<link rel="alternate" hreflang="en" href="https://priyadi.github.io/orbital-ai-datacenter/">
+<link rel="alternate" hreflang="id" href="https://priyadi.github.io/orbital-ai-datacenter/?lang=id">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Orbital AI Datacenter Calculator">
@@ -15,6 +17,7 @@
 <meta property="og:description" content="Interactive calculator comparing solar-powered AI datacenters in Earth orbit against ground datacenters: power, fleet size, launch mass, cost per kWh, carbon and water. Every number is derived live from the sliders.">
 <meta property="og:url" content="https://priyadi.github.io/orbital-ai-datacenter/">
 <meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="id_ID">
 <meta property="og:image" content="https://priyadi.github.io/orbital-ai-datacenter/og.png">
 <meta property="og:image:secure_url" content="https://priyadi.github.io/orbital-ai-datacenter/og.png">
 <meta property="og:image:type" content="image/png">
@@ -28,6 +31,7 @@
 <meta name="twitter:image:alt" content="Earth with a satellite in orbit next to the title Orbital AI Datacenter Calculator and two verdict cards: investor's verdict and planet's verdict.">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script src="i18n.js"></script>
 <style>
   :root{
     color-scheme: dark;
@@ -141,10 +145,16 @@
   details summary .ico{color:var(--text-2)}
   .card h2 .ico{color:var(--s1)}
   .legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+  .langsw{float:right;display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:2px 0 6px 12px}
+  .langsw button{background:transparent;color:var(--text-2);border:0;padding:4px 10px;font-size:12px;font-weight:600;cursor:pointer}
+  .langsw button:hover{color:var(--text)}
+  .langsw button.on{background:var(--s1);color:#fff}
+  html.i18n-wait body{visibility:hidden}
 </style>
 </head>
 <body>
 <header>
+  <div class="langsw notr" role="group" aria-label="Language / Bahasa"><button data-lang="en" lang="en" title="English">EN</button><button data-lang="id" lang="id" title="Bahasa Indonesia">ID</button></div>
   <h1>Orbital AI Datacenter Calculator <button class="ref" data-ref="premise" title="What this is &amp; references">i</button></h1>
   <p>Engineering, economics and environmental impact of a solar-powered compute station in Earth orbit, compared with a ground datacenter at the same load. Every output is derived live from the sliders; formulas and references are shown inline. Pick a scenario preset or move the sliders to see what matters.</p>
 </header>
@@ -168,7 +178,7 @@
       <div class="orbitinfo">
         <div id="orbitFacts"></div>
         <div class="ctl" style="margin-top:10px"><div class="row"><label for="incl">Orbital inclination (i)</label><output id="inclOut">53°</output></div><input type="range" id="incl" min="0" max="98" step="1" value="53"><div class="note">Starlink ≈ 53°; ISS 51.6°; sun-synchronous ≈ 97°. At equinox β cannot exceed i (or 180° − i for retrograde orbits); the view tilts the Sun's declination (up to ±23.4°) by the least amount that makes β reachable.</div></div>
-        <div class="ctl"><div class="row"><label>Observer on the ground</label><output id="obsOut"></output></div>
+        <div class="ctl"><div class="row"><label>Observer on the ground</label><output id="obsOut" class="notr"></output></div>
           <div style="display:flex;gap:6px;margin-top:4px"><input type="number" id="obsLat" value="25.997" step="0.1" min="-90" max="90" style="width:50%;background:var(--surface-2);color:var(--text);border:1px solid var(--border);border-radius:5px;padding:3px 6px;font-size:12px" title="latitude"><input type="number" id="obsLon" value="-97.157" step="0.1" min="-180" max="180" style="width:50%;background:var(--surface-2);color:var(--text);border:1px solid var(--border);border-radius:5px;padding:3px 6px;font-size:12px" title="longitude"></div><div class="note" id="obsNote">lat, lon · default: SpaceX HQ, Starbase TX</div><button class="btn" id="obsReset" style="margin-top:6px">Use Starbase</button> <button class="btn" id="obsLocate" style="margin-top:6px">Use my location</button></div>
         <div class="ctl"><div class="row"><label for="speed">Animation: seconds per orbit</label><output id="speedOut">12 s</output></div><input type="range" id="speed" min="3" max="120" step="1" value="12"></div>
         <div class="legend" style="margin-top:8px"><span><i style="background:var(--s4)"></i>sunlit arc</span><span><i style="background:#777"></i>eclipsed arc</span><span><i style="background:var(--s2)"></i>station</span><span><i style="background:var(--s3)"></i>ground track</span><span><i style="background:var(--s5)"></i>observer (you)</span></div>
@@ -184,7 +194,7 @@
   </div>
   <div class="card" style="margin-top:12px">
     <h2 data-ico="notes">Model notes &amp; what is not modeled</h2>
-    <ul class="notes">
+    <ul class="notes notr">
       <li><b>Eclipse:</b> circular orbit, fraction in shadow ⟦⟦f_e = frac{1}{π} acos frac{sqrt{h^2 + 2 R_E h}}{(R_E + h) cos β}⟧⟧ β = 0° is the worst case (sun in orbit plane); β = 90° is a dawn-dusk sun-synchronous orbit with no eclipse (only achievable near-polar, and the β drifts seasonally).</li>
       <li><b>Array:</b> sized to carry the IT load plus battery recharge during sunlight: ⟦⟦P_array = frac{P}{η_pcu} (1 + frac{f_e}{f_d η_rt})⟧⟧ Area uses 1361 W/m² × cell efficiency × derate (pointing, temperature, packing, end-of-life degradation).</li>
       <li><b>Thermal:</b> every watt of electrical power ends up as heat. Two-sided radiator: ⟦⟦A_rad = frac{Q}{2 ε σ (T_rad^4 − T_sink^4)}⟧⟧ The effective sink in LEO is not 3 K: Earth IR (~240 W/m²) and albedo load a radiator, so 200–250 K is typical. ⟦T_rad = T_chip − ΔT⟧: the radiator can only be as hot as the chip junction minus the drop through cold plate, coolant loop and fin, so an 85 °C chip with a 30 K drop gives a 328 K radiator. Hotter-qualified silicon is the main way to shrink the radiator.</li>
@@ -208,10 +218,10 @@
 <div class="tip" id="tip"></div>
 <div id="modal" class="modal" onclick="if(event.target===this)closeRefs()">
   <div class="mbox" role="dialog" aria-modal="true">
-    <div class="mhead"><span id="mtitle"></span><button class="btn" onclick="closeRefs()">✕</button></div>
+    <div class="mhead"><span id="mtitle" class="notr"></span><button class="btn" onclick="closeRefs()">✕</button></div>
     <p id="mdesc" class="mdesc"></p>
     <div class="mlabel">References</div>
-    <ul id="mlist"></ul>
+    <ul id="mlist" class="notr"></ul>
     <div class="mfoot">Links open in a new tab. Wikipedia entries are starting points; the slider notes give the specific values assumed.</div>
   </div>
 </div>
@@ -395,7 +405,7 @@ function mmlTok(src){
     if(/\s/.test(c)){i++;continue;}
     if(c==='"'||c==="“"){const j=src.indexOf(c==="“"?"”":'"',i+1);t.push({k:"text",v:src.slice(i+1,j<0?src.length:j)});i=j<0?src.length:j+1;continue;}
     let m;
-    if((m=/^(\d+(?:[ .]\d+)*|½|¼|¾)/.exec(src.slice(i)))){t.push({k:"num",v:m[0]});i+=m[0].length;continue;}
+    if((m=/^(\d+(?:[ .,]\d+)*|½|¼|¾)/.exec(src.slice(i)))){t.push({k:"num",v:m[0]});i+=m[0].length;continue;}
     if(c==="Δ"||c==="∂"){t.push({k:"id",v:c});i++;continue;}
     if((m=/^[\p{L}\p{M}₀-₉]+/u.exec(src.slice(i)))){t.push({k:"id",v:m[0]});i+=m[0].length;continue;}
     t.push({k:"op",v:c});i++;
@@ -435,7 +445,8 @@ function mml(src,block){
   return `<math${block?' display="block"':''}>${row(out)}</math>`;
 }
 const richHTML=h=>h.replace(/⟦⟦([\s\S]*?)⟧⟧/g,(_,m)=>mml(m,true)).replace(/⟦([\s\S]*?)⟧/g,(_,m)=>mml(m));
-const rich=s=>richHTML(esc(s));
+// In Indonesian mode the source string is translated first (math markers intact) and the result is marked .notr so the DOM pass in i18n.js leaves it alone.
+const rich=s=>I18N.dict?`<span class="notr">${richHTML(esc(I18N.tr(s)))}</span>`:richHTML(esc(s));
 function R(label,sym,key){return label+(sym?' <span class="sym">('+(/\p{L}/u.test(sym)?mml(sym):sym)+")</span>":"")+refBtn(key);}
 function refBtn(id){return REFS[id]?`<button class="ref" data-ref="${id}" title="What this is &amp; references" aria-label="What this is and references">i</button>`:"";}
 // Plain-language explanation shown at the top of each references box, keyed like REFS.
@@ -586,14 +597,14 @@ const DESC={
  r_pstar:"Break-even ground electricity price ⟦p^*⟧ is the grid price at which ground's time-adjusted annual cost equals orbit's, found by solving the ground cost equation for the price with the electricity subsidy netted out. If orbit is cheaper even with free power the field says so; a ⟦p^*⟧ far above market prices means orbit is far from competitive.",
 };
 function openRefs(id){const r=REFS[id];if(!r)return;
-  document.getElementById("mtitle").innerHTML=esc(r.t).replace(/\(([^()]+)\)$/,(_,m)=>"("+mml(m)+")");
+  document.getElementById("mtitle").innerHTML=esc(I18N.tr(r.t)).replace(/\(([^()]+)\)$/,(_,m)=>"("+mml(m)+")");
   const d=document.getElementById("mdesc");d.innerHTML=rich(DESC[id]||"");d.style.display=DESC[id]?"":"none";
   document.getElementById("mlist").innerHTML=r.l.map(([t,u])=>`<li><a href="${u}" target="_blank" rel="noopener noreferrer">${t}<span>↗</span></a><div class="u">${u.replace(/^https?:\/\//,"")}</div></li>`).join("");
   document.getElementById("modal").style.display="flex";}
 function closeRefs(){document.getElementById("modal").style.display="none";}
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest(".ref");if(b){e.preventDefault();openRefs(b.dataset.ref);}});
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeRefs();});
-document.querySelectorAll(".notes li").forEach(li=>{li.innerHTML=richHTML(li.innerHTML);});
+document.querySelectorAll(".notes li").forEach(li=>{li.innerHTML=richHTML(I18N.tr(li.innerHTML));});
 
 
 // ---------- section icons (original line icons) ----------
@@ -1010,7 +1021,7 @@ function update(){
       </div>
       <div id="chartEnv" style="margin-top:10px"></div>
       <div class="legend"><span><i style="background:var(--s1)"></i>hardware (embodied)</span><span><i style="background:var(--s2)"></i>launch / resupply / replacement</span><span><i style="background:var(--s5)"></i>spacecraft / facility (embodied)</span><span><i style="background:var(--s7)"></i>grid electricity</span></div>
-      <div style="margin-top:10px;font-size:12px;color:var(--text-2)">${offsetScale(m,s)}</div>
+      <div class="notr" style="margin-top:10px;font-size:12px;color:var(--text-2)">${I18N.tr(offsetScale(m,s))}</div>
     </div>
     <div class="card" style="grid-column:1/-1"><h2>${ico("economics")}Economics<span>per station · annualized · ground baseline at same IT load</span></h2>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px">
@@ -1088,11 +1099,13 @@ function renderVerdicts(m,s){
     :first==="tie"?"Both sides need about <b>"+fmtNum(m.tGround,1)+" yr</b> to power: ground for permits and interconnection, orbit for licensing plus "+fmtNum(m.fleetLaunches,0)+" launches at "+fmtNum(s.cadence,0)+"/yr."
     :"Ground is powered in <b>"+fmtNum(m.tGround,1)+" yr</b> despite the queue; "+fmtNum(m.fleetLaunches,0)+" launches at "+fmtNum(s.cadence,0)+"/yr plus "+s.olic+" yr of licensing take <b>"+fmtNum(m.tOrbit,1)+" yr</b>.")
     +(s.tval>0?" At "+(s.tval*100).toFixed(0)+" %/yr value decay that wait is an opportunity cost of <b>"+fmtMoney(m.oppOrbit)+"/yr</b> for orbit and <b>"+fmtMoney(m.oppGround)+"/yr</b> for ground, on top of the bill — without it the ratio would be <b>"+fmtNum(m.commRatioBase,2)+"×</b>.":" Time is not priced (value decay = 0).");
+  // the two "why" paragraphs are translated as whole sentences (I18N.tr on the HTML source), hence .notr
+  const cwhy=`Orbit <b>${fmtUSD(m.lcocOrbit,2)}</b> vs ground <b>$${m.lcocGround.toFixed(2)}</b> per IT-kWh including the cost of waiting for power (<b>${fmtNum(m.commRatio,2)}×</b>). ${cv==="viable"?"Launch and spacecraft hardware are cheap enough that skipping the power bill, the building and the permitting queue wins.":cv==="marginal"?"Within ±15 % — inside the error bars of every slider on this page.":"Annualized capex ("+fmtMoney(m.annCapex)+"/yr) swamps the ground electricity bill ("+fmtMoney(m.gElec)+"/yr) it would replace. "+(m.breakevenElec>0?"Break-even needs ground power at "+fmtUSD(m.breakevenElec,2)+"/kWh.":"No break-even price exists — orbit is cheaper even against free ground power.")} ${ttime}`;
   document.getElementById("verdicts").innerHTML=`
   <div class="vcard ${cc}">${avatar("investor",cm)}<div><div class="lab">Investor's verdict${refBtn("r_verdictC")}</div><div class="big">${ctext}</div>
-    <div class="why">Orbit <b>${fmtUSD(m.lcocOrbit,2)}</b> vs ground <b>$${m.lcocGround.toFixed(2)}</b> per IT-kWh including the cost of waiting for power (<b>${fmtNum(m.commRatio,2)}×</b>). ${cv==="viable"?"Launch and spacecraft hardware are cheap enough that skipping the power bill, the building and the permitting queue wins.":cv==="marginal"?"Within ±15 % — inside the error bars of every slider on this page.":"Annualized capex ("+fmtMoney(m.annCapex)+"/yr) swamps the ground electricity bill ("+fmtMoney(m.gElec)+"/yr) it would replace. "+(m.breakevenElec>0?"Break-even needs ground power at "+fmtUSD(m.breakevenElec,2)+"/kWh.":"No break-even price exists — orbit is cheaper even against free ground power.")} ${ttime}</div></div></div>
+    <div class="why notr">${I18N.tr(cwhy)}</div></div></div>
   <div class="vcard ${ec}">${avatar("planet",em)}<div><div class="lab">Planet's verdict${refBtn("r_verdictE")}</div><div class="big">${etext}</div>
-    <div class="why">${ewhy}</div></div></div>`;
+    <div class="why notr">${I18N.tr(ewhy)}</div></div></div>`;
 }
 function stackedBars(el,rows,unitFmt){
   const W=900,H=rows.length*34+12,L=70,max=Math.max(...rows.map(r=>r[1].reduce((a,b)=>a+b[1],0)))||1,pw=W-L-120;
@@ -1419,6 +1432,7 @@ function defOf(c){const v=c.log?Math.pow(10,c.def):c.def;return c.snap?c.snap(v)
 function obsIsDefault(la,lo){return la.toFixed(2)===OBS_DEF[0].toFixed(2)&&lo.toFixed(2)===OBS_DEF[1].toFixed(2);} // setObserver rounds to 2 dp
 function buildURL(){
   const q=new URLSearchParams();
+  if(I18N.lang!=="en")q.set("lang",I18N.lang);
   const pi=parseInt(document.getElementById("preset").value)||0;
   if(pi)q.set("preset",pi);
   CTLS.forEach(c=>{const v=val(c);if(!near(v,defOf(c)))q.set(c.id,numStr(v));});
@@ -1432,7 +1446,7 @@ function writeURL(){const u=buildURL();if(u!==location.pathname+location.search+
 function scheduleURL(){clearTimeout(PERMA.timer);PERMA.timer=setTimeout(writeURL,150);}
 function loadFromURL(){
   const q=new URLSearchParams(location.search);
-  if(![...q.keys()].length)return false;
+  if(![...q.keys()].some(k=>k!=="lang"))return false;
   let pi=parseInt(q.get("preset"));if(!(pi>=0&&pi<PRESETS.length))pi=0;
   document.getElementById("preset").value=pi;applyPreset(pi);
   const pr=PRESETS[pi];let custom=false;
@@ -1458,11 +1472,13 @@ document.getElementById("copyLink").addEventListener("click",async()=>{
   clearTimeout(PERMA.timer);writeURL();
   const u=location.href, n=document.getElementById("copyNote");
   try{await navigator.clipboard.writeText(u);n.textContent="copied";}
-  catch(e){try{window.prompt("Copy this link:",u);n.textContent="";}catch(_){n.textContent=u;}}
+  catch(e){try{window.prompt(I18N.tr("Copy this link:"),u);n.textContent="";}catch(_){n.textContent=u;}}
   clearTimeout(PERMA.ctimer);PERMA.ctimer=setTimeout(()=>{n.textContent="";},2000);
 });
 
 buildControls();if(!loadFromURL())update();
+I18N.beforeSwitch=()=>{clearTimeout(PERMA.timer);writeURL();}; // the language switch reloads the page: put the current scenario in the address bar first
+I18N.start();
 </script>
 </body>
 </html>
