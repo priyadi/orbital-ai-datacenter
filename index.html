@@ -881,6 +881,7 @@ function fmtArea(m2){if(m2>=1e6)return fmtNum(m2/1e6,2)+" km²";if(m2>=1e4)retur
 function fmtMass(kg){return kg>=1e9?fmtNum(kg/1e9,2)+" Mt":kg>=1e6?fmtNum(kg/1e6,2)+" kt":kg>=1e3?fmtNum(kg/1e3,1)+" t":fmtNum(kg,0)+" kg";}
 function fmtTime(s){if(Number.isNaN(s))return"n/a";if(!isFinite(s))return"effectively never";if(s<3600)return fmtNum(s/60,0)+" min";if(s<86400)return fmtNum(s/3600,1)+" h";if(s<YEAR)return fmtNum(s/86400,1)+" days";return fmtNum(s/YEAR,s/YEAR<10?1:0)+" years";}
 function fmtMoney(v){if(v<0)return"−"+fmtMoney(-v);if(!isFinite(v))return"$∞";return v>=1e12?"$"+fmtNum(v/1e12,2)+" T":v>=1e9?"$"+fmtNum(v/1e9,2)+" B":v>=1e6?"$"+fmtNum(v/1e6,1)+" M":v>=1e3?"$"+fmtNum(v/1e3,0)+" k":"$"+fmtNum(v,0);}
+function fmtUSD(v,d){return isFinite(v)?"$"+v.toFixed(d):"$∞";}
 function fmtEnergy(J){const wh=J/3600;return fmtSI(wh,"Wh");}
 const flag=(t,c)=>`<span class="flag ${c}">${t}</span>`;
 
@@ -899,7 +900,7 @@ function update(){
     tile("Radiator area <span class=sym>(A_rad)</span>"+refBtn("r_Arad"),fmtArea(m.radArea),"",fmtNum(m.radArea/m.arrayArea*100,0)+" % of array area"+(m.radFlux<=0?flag("T_rad ≤ T_sink","bad"):m.trad<290?flag("cold radiator","warn"):""))+
     tile("Fleet: "+fmtNum(m.N,0)+" × "+fmtSI(m.P,"W"),fmtSI(m.fleetP,"W"),"",fmtMass(m.fleetMass)+" · "+fmtNum(m.fleetLaunches,0)+" launches · "+fmtMoney(m.fleetCost))+
     tile("Boost power overhead <span class=sym>(P_thr/P)</span>"+refBtn("r_Pthr"),fmtNum(m.boostFrac*100,m.boostFrac<0.01?3:1),"%",fmtSI(m.thrustPower,"W")+" thruster power to cancel drag"+(m.boostFrac>0.1?flag("drag-dominated","bad"):m.boostFrac>0.01?flag("significant","warn"):""))+
-    tile("Cost per IT-kWh <span class=sym>(LCOC)</span>"+refBtn("r_LCOC"),"$"+m.lcocOrbit.toFixed(2),"",fmtNum(m.lcocOrbit/m.lcocGround,1)+"× ground ($"+m.lcocGround.toFixed(2)+") · upkeep "+fmtMoney(m.upkeep)+"/yr")+
+    tile("Cost per IT-kWh <span class=sym>(LCOC)</span>"+refBtn("r_LCOC"),fmtUSD(m.lcocOrbit,2),"",fmtNum(m.lcocOrbit/m.lcocGround,1)+"× ground ($"+m.lcocGround.toFixed(2)+") · upkeep "+fmtMoney(m.upkeep)+"/yr")+
     tile("Time to power, fleet <span class=sym>(t_power)</span>"+refBtn("r_tpower"),fmtNum(m.tOrbit,1)+" yr","","ground "+fmtNum(m.tGround,1)+" yr · "+fmtNum(m.fleetLaunches,0)+" launches at "+fmtNum(s.cadence,0)+"/yr + "+s.olic+" yr licensing")+
     tile("Lifetime if boost fails <span class=sym>(t_decay)</span>"+refBtn("r_tdecay"),fmtTime(m.lifetime),"","ballistic coeff "+fmtNum(m.totalMass/(s.cd*m.dragArea),1)+" kg/m²"+(m.lifetime<YEAR?flag("< 1 year","bad"):""));
 
@@ -1031,7 +1032,7 @@ function update(){
         [R("Total upkeep","C_upkeep","r_Cup"),fmtMoney(m.upkeep)+"/yr","",true],
         [R("Opportunity cost of time to power","C_time","r_Ctime"),fmtMoney(m.oppOrbit)+"/yr",fmtNum(m.tOrbit,1)+" yr to power ("+s.olic+" yr licensing + "+fmtNum(m.fleetLaunches,0)+" launches ÷ "+fmtNum(s.cadence,0)+"/yr) × "+(s.tval*100).toFixed(0)+" %/yr decay → ⟦(1 − x)^{−D}⟧ = "+fmtNum(m.tvOrbit,2)],
         [R("Total annual cost, orbit","C_yr","r_Cyr"),fmtMoney(m.annOrbit)+"/yr","capex + upkeep + opportunity cost",true],
-        [R("Levelized cost per IT-kWh","LCOC","r_LCOC"),( "$"+m.lcocOrbit.toFixed(3)),"$"+m.lcocOrbitBase.toFixed(3)+" before pricing time; $"+fmtNum(m.lcocOrbit*1.2*8766,0)+" per 1.2 kW accelerator-year"],
+        [R("Levelized cost per IT-kWh","LCOC","r_LCOC"),fmtUSD(m.lcocOrbit,3),"$"+m.lcocOrbitBase.toFixed(3)+" before pricing time; $"+fmtNum(m.lcocOrbit*1.2*8766,0)+" per 1.2 kW accelerator-year"],
       ])}</div>
       <div>${kv([
         ["<b>Ground baseline</b>",""],
@@ -1047,7 +1048,7 @@ function update(){
         [R("Opportunity cost of time to power","C_time","r_Ctime"),fmtMoney(m.oppGround)+"/yr",fmtNum(m.tGround,1)+" yr to power (permits + interconnection, "+(s.pblock*100).toFixed(0)+" % block risk) × "+(s.tval*100).toFixed(0)+" %/yr decay → ⟦(1 − x)^{−D}⟧ = "+fmtNum(m.tvGround,2)],
         [R("Total annual cost, ground","C_{yr,ground}","r_Cyr"),fmtMoney(m.annGround)+"/yr","incl. opportunity cost",true],
         [R("Levelized cost per IT-kWh","LCOC_ground","r_LCOC"),"$"+m.lcocGround.toFixed(3),"$"+m.lcocGroundBase.toFixed(3)+" before pricing time; orbit is "+fmtNum(m.commRatio,2)+"× ground ("+fmtNum(m.commRatioBase,2)+"× before time)"],
-        [R("Break-even ground electricity price","p^*","r_pstar"),m.breakevenElec>0?"$"+m.breakevenElec.toFixed(3)+"/kWh":"none (orbit cheaper even with free power)","ground power price at which orbit matches"],
+        [R("Break-even ground electricity price","p^*","r_pstar"),m.breakevenElec>0?fmtUSD(m.breakevenElec,3)+"/kWh":"none (orbit cheaper even with free power)","ground power price at which orbit matches"],
       ])}</div>
       </div>
       <div id="chartEcon" style="margin-top:10px"></div>
@@ -1089,7 +1090,7 @@ function renderVerdicts(m,s){
     +(s.tval>0?" At "+(s.tval*100).toFixed(0)+" %/yr value decay that wait is an opportunity cost of <b>"+fmtMoney(m.oppOrbit)+"/yr</b> for orbit and <b>"+fmtMoney(m.oppGround)+"/yr</b> for ground, on top of the bill — without it the ratio would be <b>"+fmtNum(m.commRatioBase,2)+"×</b>.":" Time is not priced (value decay = 0).");
   document.getElementById("verdicts").innerHTML=`
   <div class="vcard ${cc}">${avatar("investor",cm)}<div><div class="lab">Investor's verdict${refBtn("r_verdictC")}</div><div class="big">${ctext}</div>
-    <div class="why">Orbit <b>$${m.lcocOrbit.toFixed(2)}</b> vs ground <b>$${m.lcocGround.toFixed(2)}</b> per IT-kWh including the cost of waiting for power (<b>${fmtNum(m.commRatio,2)}×</b>). ${cv==="viable"?"Launch and spacecraft hardware are cheap enough that skipping the power bill, the building and the permitting queue wins.":cv==="marginal"?"Within ±15 % — inside the error bars of every slider on this page.":"Annualized capex ("+fmtMoney(m.annCapex)+"/yr) swamps the ground electricity bill ("+fmtMoney(m.gElec)+"/yr) it would replace. "+(m.breakevenElec>0?"Break-even needs ground power at $"+m.breakevenElec.toFixed(2)+"/kWh.":"No break-even price exists — orbit is cheaper even against free ground power.")} ${ttime}</div></div></div>
+    <div class="why">Orbit <b>${fmtUSD(m.lcocOrbit,2)}</b> vs ground <b>$${m.lcocGround.toFixed(2)}</b> per IT-kWh including the cost of waiting for power (<b>${fmtNum(m.commRatio,2)}×</b>). ${cv==="viable"?"Launch and spacecraft hardware are cheap enough that skipping the power bill, the building and the permitting queue wins.":cv==="marginal"?"Within ±15 % — inside the error bars of every slider on this page.":"Annualized capex ("+fmtMoney(m.annCapex)+"/yr) swamps the ground electricity bill ("+fmtMoney(m.gElec)+"/yr) it would replace. "+(m.breakevenElec>0?"Break-even needs ground power at "+fmtUSD(m.breakevenElec,2)+"/kWh.":"No break-even price exists — orbit is cheaper even against free ground power.")} ${ttime}</div></div></div>
   <div class="vcard ${ec}">${avatar("planet",em)}<div><div class="lab">Planet's verdict${refBtn("r_verdictE")}</div><div class="big">${etext}</div>
     <div class="why">${ewhy}</div></div></div>`;
 }
@@ -1131,12 +1132,14 @@ function drawEcon(m){
   const rows=[["Orbit",[["annualized capex",m.annCapex,"--s1"],["propellant launches",m.annProp,"--s2"],["replacement",m.annReplace,"--s3"],["ops",m.annOps,"--s4"],["carbon price",m.carbonOrbit,"--s9"],["offset credits",m.offsetOrbit,"--s6"],["time to power (opportunity cost)",m.oppOrbit,"--s8"]]],
               ["Ground",[["hardware + facility (net of incentives)",m.gHw+m.gFac-m.gSubCap,"--s1"],["electricity (net of incentives)",m.gElec-m.gSubElec,"--s7"],["ops + repairs",m.gOps+m.gReplace,"--s4"],["politics + permitting delay",m.gPolit+m.gDelay,"--s5"],["carbon price",m.carbonGround,"--s9"],["offset credits",m.offsetGround,"--s6"],["time to power (opportunity cost)",m.oppGround,"--s8"]]]];
   const W=900,H=80,L=70,max=Math.max(m.annOrbit,m.annGround)||1,pw=W-L-110;
+  // A launch campaign of millennia overflows the opportunity cost to ∞: that segment then fills the bar and finite ones vanish, instead of ∞/∞ = NaN.
+  const rel=(v,ref)=>isFinite(ref)?v/ref:isFinite(v)?0:1;
   let svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-height:110px">`;
   rows.forEach((r,i)=>{
     const y=8+i*34;let x=L;const tot=r[1].reduce((a,b)=>a+b[1],0);
     svg+=`<text x="${L-8}" y="${y+15}" text-anchor="end" font-size="12" fill="var(--text-2)">${r[0]}</text>`;
-    r[1].forEach(seg=>{const w=pw*seg[1]/max;if(w<=0)return;svg+=`<rect x="${x}" y="${y}" width="${Math.max(0,w-2)}" height="20" rx="3" fill="var(${seg[2]})" data-tip="${r[0]} · ${seg[0]}: ${fmtMoney(seg[1])}/yr (${fmtNum(seg[1]/tot*100,0)} %)"/>`;x+=w;});
-    svg+=`<text x="${L+pw*tot/max+6}" y="${y+15}" font-size="12" fill="var(--text)" font-weight="550">${fmtMoney(tot)}/yr</text>`;
+    r[1].forEach(seg=>{const w=pw*rel(seg[1],max);if(w<=0)return;svg+=`<rect x="${x}" y="${y}" width="${Math.max(0,w-2)}" height="20" rx="3" fill="var(${seg[2]})" data-tip="${r[0]} · ${seg[0]}: ${fmtMoney(seg[1])}/yr (${fmtNum(rel(seg[1],tot)*100,0)} %)"/>`;x+=w;});
+    svg+=`<text x="${L+pw*rel(tot,max)+6}" y="${y+15}" font-size="12" fill="var(--text)" font-weight="550">${fmtMoney(tot)}/yr</text>`;
   });
   document.getElementById("chartEcon").innerHTML=svg+"</svg>";
 }
